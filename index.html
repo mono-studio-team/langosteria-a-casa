@@ -6,10 +6,38 @@
     />
   </head>
   <body>
-    <button id="day1">test</button>
-    <input id="calendar" />
-    <script src="https://unpkg.com/browse/axios@0.19.2/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div>
+      <div>radio<br />
+        <input type="radio" name="choice" value="delivery" checked> delivery</input>
+        <input type="radio" name="choice" value="pickup" > consegna</input>
+      </div>
+      <div>
+        date<br />
+        <button id="day1">day1</button>
+        <button id="day2">day2</button>
+        <button id="day3">day3</button>
+        <div class="flatpickr">
+          <input type="text" placeholder="Select Date.." data-input> <!-- input is mandatory -->
+
+          <button class="input-button" title="toggle" data-toggle>
+             text
+          </button>
+      </div>
+      </div>
+      <div>
+        time<br />
+        <button id="time1">time1</button>
+        <button id="time2">time2</button>
+      </div>
+      <div>
+        feedback<br />
+        <p id="ok" style="visibility: hidden;">Ok</p>
+        <p id="ko" style="visibility: hidden;">Ko</p>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.14.0/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.js"></script>
     <script src="./index.js"></script>
   </body>
 </html>

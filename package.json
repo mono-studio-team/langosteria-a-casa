@@ -5,6 +5,11 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2",
+    "date-fns": "^2.14.0",
     "flatpickr": "^4.6.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0"
   }
 }
