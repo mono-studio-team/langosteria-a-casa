@@ -22,13 +22,17 @@ export const coda = (instance) => {
     instance.get(`/docs/${docId}/tables/${tableIdOrName}/columns`);
 
   const getTableRows = ({ docId, tableIdOrName }) =>
-    instance.get(`/docs/${docId}/tables/${tableIdOrName}/rows`);
+    instance.get(`/docs/${docId}/tables/${tableIdOrName}/rows`, {
+      params: { sortBy: 'natural' },
+    });
 
   const getViewColumns = ({ docId, viewIdOrName }) =>
     instance.get(`/docs/${docId}/views/${viewIdOrName}/columns`);
 
   const getViewRows = ({ docId, viewIdOrName }) =>
-    instance.get(`/docs/${docId}/views/${viewIdOrName}/rows`);
+    instance.get(`/docs/${docId}/views/${viewIdOrName}/rows`, {
+      params: { sortBy: 'natural' },
+    });
 
   const getTableData = async ({ docId, tableIdOrName }) => {
     const { data: dataColumns } = await getTableColumns({
