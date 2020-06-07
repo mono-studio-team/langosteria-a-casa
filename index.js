@@ -27,6 +27,7 @@ const $CALENDAR = '.flatpickr';
 const $CHECKOUT_BUTTON = '#checkout-btn';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
+const $CLASS_SELECTED = 'selected';
 
 let fp;
 let state = {
@@ -78,11 +79,11 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     // update selected css
     if (!date) {
-      el.classList.remove('selected');
+      el.classList.remove($CLASS_SELECTED);
     } else if (el.dataset.date === selectedAvailability.dateFlatpickr) {
-      el.classList.add('selected');
+      el.classList.add($CLASS_SELECTED);
     } else {
-      el.classList.remove('selected');
+      el.classList.remove($CLASS_SELECTED);
     }
   });
 };
@@ -134,11 +135,11 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
 
     // update selected css
     if (!time) {
-      el.classList.remove('selected');
+      el.classList.remove($CLASS_SELECTED);
     } else if (el.dataset.timeslot === time) {
-      el.classList.add('selected');
+      el.classList.add($CLASS_SELECTED);
     } else {
-      el.classList.remove('selected');
+      el.classList.remove($CLASS_SELECTED);
     }
   });
 };
