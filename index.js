@@ -98,7 +98,9 @@ const updateCalendar = ({ availabilities, mode }) => {
     return res;
   }, []);
 
-  fp && fp.destroy && fp.destroy();
+  if (fp && fp.destroy) {
+    fp.destroy();
+  }
 
   fp = flatpickr($CALENDAR, {
     locale: Italian,
