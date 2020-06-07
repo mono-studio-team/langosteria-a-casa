@@ -9,8 +9,8 @@
   <body>
     <div>
       <div>radio<br />
-        <input type="radio" name="mode" value="delivery" checked> delivery</input>
-        <input type="radio" name="mode" value="pickup"> pickup</input>
+        <input type="radio" name="shipping-method-choice" checked> delivery</input>
+        <input type="radio" name="shipping-method-choice" > pickup</input>
       </div>
       <div>
         date<br />
@@ -30,11 +30,6 @@
         <button id="time1" class="time-btn" data-timeslot="1" >time1</button>
         <button id="time2" class="time-btn" data-timeslot="2" >time2</button>
       </div>
-      <!-- <div>
-        before limit time<br />
-        <p id="beforeLimit">before 17</p>
-        <p id="afterLimit">after 17</p>
-      </div> -->
       <div>
         fake text note area (the one to use)<br />
         <div><textarea id="fake-notes" /></div>
@@ -42,7 +37,7 @@
         <div><textarea id="real-notes" style="opacity: 0.5;" /></div>
       </div>
       <div>
-        <button id="checkout-btn">checkout</button>
+        <button id="btn-checkout">checkout</button>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>

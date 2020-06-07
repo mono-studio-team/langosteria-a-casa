@@ -20,14 +20,14 @@ const condaTableIds = {
 // const filterPickups = (i) => i.nome.startsWith('Pickup');
 // const filterDeliveries = (i) => i.nome.startsWith('Delivery');
 
-const $MODE_RADIO = 'input[name=mode]';
+const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR = '.flatpickr';
-const $CHECKOUT_BUTTON = '#checkout-btn';
+const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
-const $CLASS_SELECTED = 'selected';
+const $CLASS_SELECTED = 'Selected';
 
 let fp;
 let state = {
@@ -98,7 +98,7 @@ const updateCalendar = ({ availabilities, mode }) => {
     return res;
   }, []);
 
-  fp.destroy();
+  fp && fp.destroy && fp.destroy();
 
   fp = flatpickr($CALENDAR, {
     locale: Italian,
@@ -204,12 +204,15 @@ const setupDateButtons = () => {
 };
 
 const setupModeRadios = () => {
-  const radios = [...document.querySelectorAll($MODE_RADIO)];
+  const radios = document.querySelectorAll($MODE_RADIO);
+  radios[0].setAttribute('data-value', 'delivery');
+  radios[1].setAttribute('data-value', 'pickup');
+
   radios.forEach(
     (el) =>
       (el.onchange = () => {
         updateState([
-          { type: 'mode', payload: el.value },
+          { type: 'mode', payload: el.dataset.value },
           { type: 'date', payload: null },
           { type: 'time', payload: null },
         ]);
