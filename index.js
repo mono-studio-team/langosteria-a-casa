@@ -27,7 +27,7 @@ const $CALENDAR = '.flatpickr';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
-const $CLASS_SELECTED = 'Selected';
+const $CLASS_SELECTED = 'selected';
 
 let fp;
 let state = {
@@ -174,11 +174,8 @@ const setupTimeButtons = () => {
 const setupCalendar = () => {
   document.querySelector(
     $CALENDAR
-  ).innerHTML = `<input type="text" class="text-block-2" placeholder="Select Date.." data-input> <!-- input is mandatory -->
-
-  <button class="button options w-button" title="toggle" data-toggle>
-     text
-  </button>`;
+  ).innerHTML = `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
+  <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
   fp = flatpickr($CALENDAR, {
     locale: Italian,
     wrap: true,
