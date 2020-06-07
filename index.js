@@ -172,6 +172,13 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
+  document.querySelector(
+    $CALENDAR
+  ).innerHTML = `<input type="text" class="text-block-2" placeholder="Select Date.." data-input> <!-- input is mandatory -->
+
+  <button class="button options w-button" title="toggle" data-toggle>
+     text
+  </button>`;
   fp = flatpickr($CALENDAR, {
     locale: Italian,
     wrap: true,
