@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
-console.log('>>langosteria@1.3<<');
+console.log('>>langosteria@1.4<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -16,22 +16,6 @@ const condaTableIds = {
   settingsAddresses: 'grid-rp5_HDm90K',
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
-
-const loadCaps = async () => {
-  console.log('getting caps...');
-  const { axiosInstance } = await import('./useAxios');
-  const { coda } = await import('./useCoda');
-  const { getTableData } = coda(axiosInstance);
-
-  const capsObj = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsCaps,
-  });
-  caps = capsObj.map((i) => i['cAP']);
-  console.log('got caps!');
-};
-
-loadCaps();
 
 // const codaViewIds = {
 //   next3days: 'table-gzB6L_u3ML',
@@ -306,7 +290,6 @@ const load = async () => {
 
   // console.log('pickups', pickups);
   // console.log('deliveries', deliveries);
-  // console.log('caps', caps);
   // console.log('availabilities', availabilities);
   // console.log('next3Days', next3Days);
   //|-> end of GET DATA FROM CODA
