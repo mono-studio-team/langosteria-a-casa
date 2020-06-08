@@ -27,22 +27,22 @@ var componentForm = {
   postal_code: 'short_name',
 };
 
-let caps;
-const loadCaps = async () => {
-  console.log('getting caps...');
-  const { axiosInstance } = await import('./useAxios');
-  const { coda } = await import('./useCoda');
-  const { getTableData } = coda(axiosInstance);
+let caps = [];
+// const loadCaps = async () => {
+//   console.log('getting caps...');
+//   const { axiosInstance } = await import('./useAxios');
+//   const { coda } = await import('./useCoda');
+//   const { getTableData } = coda(axiosInstance);
 
-  const capsObj = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsCaps,
-  });
-  caps = capsObj.map((i) => i['cAP']);
-  console.log('got caps!');
-};
+//   const capsObj = await getTableData({
+//     docId: condaDocId,
+//     tableIdOrName: condaTableIds.settingsCaps,
+//   });
+//   caps = capsObj.map((i) => i['cAP']);
+//   console.log('got caps!');
+// };
 
-loadCaps();
+// loadCaps();
 
 function initAutocomplete() {
   autocomplete = new google.maps.places.Autocomplete(
