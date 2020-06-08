@@ -17,11 +17,13 @@ const condaTableIds = {
 };
 
 const loadCaps = async () => {
+  console.log('getting caps...');
   const capsObj = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsCaps,
   });
   caps = capsObj.map((i) => i['cAP']);
+  console.log('got caps!');
 };
 
 loadCaps();
@@ -306,7 +308,9 @@ const load = async () => {
 };
 
 intervalId = setInterval(function () {
-  if (!!document.querySelector(input[(name = shipping - method - choice)])) {
+  console.log('search for radios...');
+  if (!!document.querySelector($MODE_RADIO)) {
+    console.log('radios found!');
     load();
   }
 }, 1000);
