@@ -44,7 +44,7 @@ const loadCaps = async () => {
 
 loadCaps();
 
-async function initAutocomplete() {
+function initAutocomplete() {
   autocomplete = new google.maps.places.Autocomplete(
     document.getElementById('route_street_number'),
     { types: ['geocode'] }
