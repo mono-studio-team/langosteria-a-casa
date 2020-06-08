@@ -240,11 +240,11 @@ const load = async () => {
   // });
   // const pickups = servicesObj.filter(filterPickups);
   // const deliveries = servicesObj.filter(filterDeliveries);
-  // const capsObj = await getTableData({
-  //   docId: condaDocId,
-  //   tableIdOrName: condaTableIds.settingsCaps,
-  // });
-  // const caps = capsObj.map((i) => i['cAP']);
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps,
+  });
+  caps = capsObj.map((i) => i['cAP']);
   // const next3Days = await getViewData({
   //   docId: condaDocId,
   //   viewIdOrName: codaViewIds.next3days,
