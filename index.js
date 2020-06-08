@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
-console.log('>>custom@1.0<<');
+console.log('>>custom@1.1<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -18,6 +18,10 @@ const condaTableIds = {
 
 const loadCaps = async () => {
   console.log('getting caps...');
+  const { axiosInstance } = await import('./useAxios');
+  const { coda } = await import('./useCoda');
+  const { getTableData } = coda(axiosInstance);
+
   const capsObj = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsCaps,
