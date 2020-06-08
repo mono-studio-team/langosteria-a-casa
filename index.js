@@ -5,6 +5,9 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
+console.log('>>custom@1.0<<');
+let intervalId;
+
 const condaDocId = 'iOgTgYXs5x';
 
 const condaTableIds = {
@@ -12,6 +15,16 @@ const condaTableIds = {
   settingsCaps: 'grid-PjdOUMts6h',
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
+
+const loadCaps = async () => {
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps,
+  });
+  caps = capsObj.map((i) => i['cAP']);
+};
+
+loadCaps();
 
 // const codaViewIds = {
 //   next3days: 'table-gzB6L_u3ML',
@@ -69,12 +82,19 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
       (a) => a.dateFlatpickr === el.dataset.date
     );
 
+    el.classList.remove($CLASS_SELECTED);
+    el.classList.remove($CLASS_DISABLED);
+
     if (!date) {
       // do nothing
     } else if (mode === 'delivery') {
       el.disabled = !(availability.delivery1Cap || availability.delivery2Cap);
     } else {
       el.disabled = !(availability.delivery1Cap || availability.delivery2Cap);
+    }
+
+    if (el.disabled) {
+      el.classList.add($CLASS_DISABLED);
     }
 
     // update selected css
@@ -119,6 +139,9 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
     (a) => a.dateFlatpickr === date
   );
 
+  el.classList.remove($CLASS_SELECTED);
+  el.classList.remove($CLASS_DISABLED);
+
   document.querySelectorAll($TIME_BUTTONS).forEach((el) => {
     // update enabled/disabled
     if (!date) {
@@ -135,6 +158,10 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
           : !selectedAvailability.pickup2Cap;
     }
 
+    if (el.disabled) {
+      el.classList.add($CLASS_DISABLED);
+    }
+
     // update selected css
     if (!time) {
       el.classList.remove($CLASS_SELECTED);
@@ -149,6 +176,11 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
 const updateCheckoutButton = ({ mode, date, time }) => {
   const isOk = mode && date && time;
   document.querySelector($CHECKOUT_BUTTON).disabled = !isOk;
+  if (isOk) {
+    document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
+  } else {
+    document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
+  }
 };
 
 const setupCheckoutButton = () =>
@@ -227,6 +259,7 @@ const setupModeRadios = () => {
 };
 
 const load = async () => {
+  clearInterval(intervalId);
   setupCalendar();
 
   const { axiosInstance } = await import('./useAxios');
@@ -240,11 +273,7 @@ const load = async () => {
   // });
   // const pickups = servicesObj.filter(filterPickups);
   // const deliveries = servicesObj.filter(filterDeliveries);
-  const capsObj = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsCaps,
-  });
-  caps = capsObj.map((i) => i['cAP']);
+
   // const next3Days = await getViewData({
   //   docId: condaDocId,
   //   viewIdOrName: codaViewIds.next3days,
@@ -276,14 +305,20 @@ const load = async () => {
   setupCheckoutButton();
 };
 
-const routeStreetNumber = document.querySelector('#route_street_number');
+intervalId = setInterval(function () {
+  if (!!document.querySelector(input[(name = shipping - method - choice)])) {
+    load();
+  }
+}, 1000);
 
-if (!routeStreetNumber.value) {
-  routeStreetNumber.onkeydown = (e) => {
-    console.log('checking', routeStreetNumber.value);
-    if (routeStreetNumber.value !== '') {
-      load();
-      routeStreetNumber.onkeydown = null;
-    }
-  };
-}
+// const routeStreetNumber = document.querySelector('#route_street_number');
+
+// if (!routeStreetNumber.value) {
+//   routeStreetNumber.onkeydown = (e) => {
+//     console.log('checking', routeStreetNumber.value);
+//     if (routeStreetNumber.value !== '') {
+//       load();
+//       routeStreetNumber.onkeydown = null;
+//     }
+//   };
+// }
