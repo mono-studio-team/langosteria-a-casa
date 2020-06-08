@@ -1,9 +1,9 @@
-// import spacetime from 'spacetime';
 import flatpickr from 'flatpickr';
 import { Italian } from 'flatpickr/dist/l10n/it.js';
 const { addDays, format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
+require('./useMaps');
 
 const condaDocId = 'iOgTgYXs5x';
 
@@ -226,7 +226,7 @@ const setupModeRadios = () => {
   );
 };
 
-const main = async () => {
+const load = async () => {
   setupCalendar();
 
   const { axiosInstance } = await import('./useAxios');
@@ -276,27 +276,14 @@ const main = async () => {
   setupCheckoutButton();
 };
 
-main();
+const routeStreetNumber = document.querySelector('#route_street_number');
 
-// const isBefore = checkTimeIsBeforeItalian('05:00pm');
-// if (isBefore) {
-//   document.querySelector('#beforeLimit').style.visibility = 'visible';
-//   document.querySelector('#afterLimit').style.visibility = 'hidden';
-//   document
-//     .querySelectorAll('#order-overflow')
-//     .forEach((el) => (el.style.display = 'none'));
-// } else {
-//   document.querySelector('#beforeLimit').style.visibility = 'hidden';
-//   document.querySelector('#afterLimit').style.visibility = 'visible';
-//   document
-//     .querySelectorAll('#order-overflow')
-//     .forEach((el) => (el.style.display = 'block'));
-// }
-
-// const checkTimeIsBeforeItalian = (italianTimeString = '05:00pm') => {
-//   const here = new spacetime(new Date());
-//   const italy = here.goto('Europe/Rome');
-//   const limitTime = italy.time(italianTimeString);
-//   const isBeforeItalianLimitTime = italy.isBefore(limitTime);
-//   return isBeforeItalianLimitTime;
-// };
+if (!routeStreetNumber.value) {
+  routeStreetNumber.onkeydown = (e) => {
+    console.log('checking', routeStreetNumber.value);
+    if (routeStreetNumber.value !== '') {
+      load();
+      routeStreetNumber.onkeydown = null;
+    }
+  };
+}
