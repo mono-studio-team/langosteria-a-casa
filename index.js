@@ -3,7 +3,7 @@ import { Italian } from 'flatpickr/dist/l10n/it.js';
 const { addDays, format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
-require('./useMaps');
+// require('./useMaps');
 
 console.log('>>langosteria@1.9<<');
 let intervalId;
