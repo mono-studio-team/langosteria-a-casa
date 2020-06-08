@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
-console.log('>>custom@1.1<<');
+console.log('>>langosteria@1.2<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -13,6 +13,7 @@ const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
   settingsCaps: 'grid-PjdOUMts6h',
+  settingsAddresses: 'grid-rp5_HDm90K',
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
 
@@ -47,6 +48,7 @@ const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
 const $CLASS_SELECTED = 'selected';
+const $CLASS_DISABLED = 'selected';
 
 let fp;
 let state = {
@@ -63,7 +65,6 @@ const updateState = (actions) => {
     nextState = { ...state, ...nextState, [type]: payload };
   });
 
-  console.clear();
   const statelog = {
     mode: nextState.mode,
     date: nextState.date,
@@ -284,6 +285,11 @@ const load = async () => {
   //   docId: condaDocId,
   //   viewIdOrName: codaViewIds.next3days,
   // });
+
+  const addresses = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsAddresses,
+  });
 
   const availabilities = await getTableData({
     docId: condaDocId,
