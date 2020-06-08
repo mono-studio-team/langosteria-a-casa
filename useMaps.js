@@ -49,7 +49,7 @@ async function initAutocomplete() {
     { types: ['geocode'] }
   );
   autocomplete.setFields(['address_component']);
-  autocomplete.addListener('place_changed', fillInAddress);
+  autocomplete.addListener('place_changed', () => fillInAddress(caps));
   autocomplete.setComponentRestrictions({ country: 'it' });
 
   // con questo evento ascoltiamo le immissioni manuali nell' input
@@ -58,6 +58,7 @@ async function initAutocomplete() {
     .querySelector('[data-address="postal_code"]')
     .addEventListener('input', function () {
       checkCoverage(
+        caps,
         document.querySelector('[data-address="postal_code"]').value
       );
     });
@@ -65,6 +66,7 @@ async function initAutocomplete() {
     .querySelector('[data-address="postal_code"]')
     .addEventListener('keydown', function () {
       checkCoverage(
+        caps,
         document.querySelector('[data-address="postal_code"]').value
       );
     });
@@ -72,13 +74,14 @@ async function initAutocomplete() {
     .querySelector('[data-address="postal_code"]')
     .addEventListener('blur', function () {
       checkCoverage(
+        caps,
         document.querySelector('[data-address="postal_code"]').value
       );
     });
 }
 
 // controllo del cap corrente
-function checkCoverage(postal_code) {
+function checkCoverage(caps, postal_code) {
   // se in lista o minore di 5 caratteri o campo vuoto -> non mostra errore
   // altrimenti -> mostra errore
   if (
@@ -96,7 +99,7 @@ function checkCoverage(postal_code) {
   }
 }
 
-function fillInAddress() {
+function fillInAddress(caps) {
   var place = autocomplete.getPlace();
 
   let route;

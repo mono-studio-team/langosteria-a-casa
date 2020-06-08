@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
-console.log('>>langosteria@1.5<<');
+console.log('>>langosteria@1.7<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
