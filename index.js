@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 require('./useMaps');
 
-console.log('>>langosteria@1.4<<');
+console.log('>>langosteria@1.5<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -32,7 +32,7 @@ const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
 const $CLASS_SELECTED = 'selected';
-const $CLASS_DISABLED = 'selected';
+const $CLASS_DISABLED = 'disabled';
 
 let fp;
 let state = {
@@ -130,9 +130,6 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
     (a) => a.dateFlatpickr === date
   );
 
-  el.classList.remove($CLASS_SELECTED);
-  el.classList.remove($CLASS_DISABLED);
-
   document.querySelectorAll($TIME_BUTTONS).forEach((el) => {
     // update enabled/disabled
     if (!date) {
@@ -148,6 +145,9 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
           ? !selectedAvailability.pickup1Cap
           : !selectedAvailability.pickup2Cap;
     }
+
+    el.classList.remove($CLASS_SELECTED);
+    el.classList.remove($CLASS_DISABLED);
 
     if (el.disabled) {
       el.classList.add($CLASS_DISABLED);
