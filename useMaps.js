@@ -27,6 +27,7 @@ var componentForm = {
   postal_code: 'short_name',
 };
 
+let caps;
 const loadCaps = async () => {
   console.log('getting caps...');
   const { axiosInstance } = await import('./useAxios');
@@ -37,13 +38,13 @@ const loadCaps = async () => {
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsCaps,
   });
-  const caps = capsObj.map((i) => i['cAP']);
+  caps = capsObj.map((i) => i['cAP']);
   console.log('got caps!');
-  return caps;
 };
 
+loadCaps();
+
 async function initAutocomplete() {
-  const caps = await loadCaps();
   autocomplete = new google.maps.places.Autocomplete(
     document.getElementById('route_street_number'),
     { types: ['geocode'] }
