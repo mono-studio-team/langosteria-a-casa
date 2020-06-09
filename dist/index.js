@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.992<<');
+console.log('>>langosteria@1.993<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21307,20 +21307,19 @@ const updateCalendar = ({
 
   if (fp && fp.destroy) {
     fp.destroy();
+    fp = (0, _flatpickr.default)($CALENDAR, {
+      locale: _it.Italian,
+      wrap: true,
+      enable,
+      onChange: (selectedDates, dateStr) => updateState([{
+        type: 'date',
+        payload: dateStr
+      }, {
+        type: 'time',
+        payload: null
+      }])
+    });
   }
-
-  fp = (0, _flatpickr.default)($CALENDAR, {
-    locale: _it.Italian,
-    wrap: true,
-    enable,
-    onChange: (selectedDates, dateStr) => updateState([{
-      type: 'date',
-      payload: dateStr
-    }, {
-      type: 'time',
-      payload: null
-    }])
-  });
 };
 
 const updateTimeButtons = ({
