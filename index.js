@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.98<<');
+console.log('>>langosteria@1.99<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -197,7 +197,7 @@ const setupTimeButtons = () => {
 
 const setupCalendar = () => {
   const calendarEl = document.createElement('input');
-  calendarEl.id = $CALENDAR;
+  calendarEl.id = 'calendar';
   calendarEl.classList.add('text-block-2');
   calendarEl.type = 'text';
   calendarEl.placeholder = 'Calendario';
