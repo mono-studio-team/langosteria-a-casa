@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.97<<');
+console.log('>>langosteria@1.98<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21408,11 +21408,16 @@ const setupCalendar = () => {
   // `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
   // <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
 
-  fp = (0, _flatpickr.default)(calendarEl, {
-    locale: _it.Italian,
-    wrap: true,
-    enable: ['1900-1-1']
-  });
+  let checkExist = setInterval(function () {
+    if (document.querySelector($CALENDAR).length) {
+      clearInterval(checkExist);
+      fp = (0, _flatpickr.default)(calendarEl, {
+        locale: _it.Italian,
+        wrap: true,
+        enable: ['1900-1-1']
+      });
+    }
+  }, 100);
 };
 
 const setupDateButtons = () => {
