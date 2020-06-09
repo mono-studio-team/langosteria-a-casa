@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.995<<');
+console.log('>>langosteria@1.996<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21219,9 +21219,9 @@ const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '#calendar';
-const $CHECKOUT_BUTTON = '#btn-checkout';
-const $FAKE_NOTES_TEXTAREA = '#fake-notes';
-const $REAL_NOTES_TEXTAREA = 'textarea[name=note]';
+const $CHECKOUT_BUTTON = '#btn-checkout'; // const $FAKE_NOTES_TEXTAREA = '#fake-notes';
+
+const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 let fp;
@@ -21254,6 +21254,13 @@ const updateState = actions => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
+  state = nextState;
+};
+
+const updateNotes = notes => {
+  const nextState = { ...state,
+    notes
+  };
   state = nextState;
 };
 
@@ -21371,7 +21378,25 @@ const updateCheckoutButton = ({
   }
 };
 
-const setupCheckoutButton = () => document.querySelector($CHECKOUT_BUTTON).onclick = () => {
+const setupCheckoutButton = () => {
+  const originalOnClick = document.querySelector($CHECKOUT_BUTTON).onclick;
+  const {
+    mode,
+    date,
+    time,
+    notes
+  } = state;
+  const dataString = JSON.stringify({
+    mode,
+    date,
+    time,
+    notes
+  });
+  document.querySelector($NOTES_TEXTAREA).value = dataString;
+  originalOnClick();
+};
+
+document.querySelector($CHECKOUT_BUTTON).onclick = () => {
   const {
     mode,
     date,
@@ -21386,6 +21411,11 @@ const setupCheckoutButton = () => document.querySelector($CHECKOUT_BUTTON).oncli
   }, null, 2);
   document.querySelector($REAL_NOTES_TEXTAREA).value = dataString;
   console.log(dataString);
+};
+
+const setupNotesListener = () => {
+  document.querySelector($NOTES_TEXTAREA).onkeydown = updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+  document.querySelector($NOTES_TEXTAREA).onchange = updateNotes(document.querySelector($NOTES_TEXTAREA).value);
 };
 
 const setupTimeButtons = () => {
@@ -21462,7 +21492,7 @@ const setupModeRadios = () => {
   radios.forEach(el => el.onchange = () => {
     updateState([{
       type: 'mode',
-      payload: el.dataset.value
+      payload: el.dataset.mode
     }, {
       type: 'date',
       payload: null
@@ -21518,6 +21548,7 @@ const load = async () => {
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
+  setupNotesListener();
   setupCheckoutButton();
 };
 
