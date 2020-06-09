@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.997<<');
+console.log('>>langosteria@1.999<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21396,23 +21396,6 @@ const setupCheckoutButton = () => {
   originalOnClick();
 };
 
-document.querySelector($CHECKOUT_BUTTON).onclick = () => {
-  const {
-    mode,
-    date,
-    time
-  } = state;
-  const notes = document.querySelector($FAKE_NOTES_TEXTAREA).value;
-  const dataString = JSON.stringify({
-    mode,
-    date,
-    time,
-    notes
-  }, null, 2);
-  document.querySelector($REAL_NOTES_TEXTAREA).value = dataString;
-  console.log(dataString);
-};
-
 const setupNotesListener = () => {
   document.querySelector($NOTES_TEXTAREA).onkeydown = updateNotes(document.querySelector($NOTES_TEXTAREA).value);
   document.querySelector($NOTES_TEXTAREA).onchange = updateNotes(document.querySelector($NOTES_TEXTAREA).value);
@@ -21486,21 +21469,24 @@ const setupDateButtons = () => {
 };
 
 const setupModeRadios = () => {
-  const radios = document.querySelectorAll($MODE_RADIO);
-  radios[0].setAttribute('data-mode', 'delivery');
-  radios[1].setAttribute('data-mode', 'pickup');
-  radios.forEach(el => el.onchange = () => {
-    updateState([{
-      type: 'mode',
-      payload: el.dataset.mode
-    }, {
-      type: 'date',
-      payload: null
-    }, {
-      type: 'time',
-      payload: null
-    }]);
-  });
+  setInterval(function () {
+    const radios = document.querySelectorAll($MODE_RADIO);
+    if (radios[0].dataset.mode) return;
+    radios[0].setAttribute('data-mode', 'delivery');
+    radios[1].setAttribute('data-mode', 'pickup');
+    radios.forEach(el => el.onchange = () => {
+      updateState([{
+        type: 'mode',
+        payload: el.dataset.mode
+      }, {
+        type: 'date',
+        payload: null
+      }, {
+        type: 'time',
+        payload: null
+      }]);
+    });
+  }, 1000);
 };
 
 const load = async () => {
