@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.91<<');
+console.log('>>langosteria@1.93<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -27,7 +27,7 @@ const condaTableIds = {
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
-const $CALENDAR = '.flatpickr';
+const $CALENDAR = '#calendar';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $REAL_NOTES_TEXTAREA = '#real-notes';
@@ -141,7 +141,7 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
           : !selectedAvailability.delivery2Cap;
     } else {
       el.disabled =
-        el.dataset.timeslot === 1
+        el.dataset.timeslot === 2
           ? !selectedAvailability.pickup1Cap
           : !selectedAvailability.pickup2Cap;
     }
@@ -195,10 +195,12 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  document.querySelector(
-    $CALENDAR
-  ).innerHTML = `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
-  <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
+  document.querySelector($CALENDAR).innerHTML =
+    '<input id="calendar" type="text" placeholder="Calendario" data-input>';
+
+  // `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
+  // <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
+
   fp = flatpickr($CALENDAR, {
     locale: Italian,
     wrap: true,
@@ -234,8 +236,8 @@ const setupDateButtons = () => {
 
 const setupModeRadios = () => {
   const radios = document.querySelectorAll($MODE_RADIO);
-  radios[0].setAttribute('data-value', 'delivery');
-  radios[1].setAttribute('data-value', 'pickup');
+  radios[0].setAttribute('data-mode', 'delivery');
+  radios[1].setAttribute('data-mode', 'pickup');
 
   radios.forEach(
     (el) =>
