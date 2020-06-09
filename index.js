@@ -27,6 +27,7 @@ const condaTableIds = {
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
+const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '#calendar';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
@@ -195,7 +196,7 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  document.querySelector($CALENDAR).innerHTML =
+  document.querySelector($CALENDAR_DIV).innerHTML =
     '<input id="calendar" type="text" placeholder="Calendario" data-input>';
 
   // `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
