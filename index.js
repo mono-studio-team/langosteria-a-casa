@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.993<<');
+console.log('>>langosteria@1.994<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -31,7 +31,7 @@ const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '#calendar';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $FAKE_NOTES_TEXTAREA = '#fake-notes';
-const $REAL_NOTES_TEXTAREA = '#real-notes';
+const $REAL_NOTES_TEXTAREA = 'textarea[name=note]';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
@@ -210,28 +210,27 @@ const setupCalendar = () => {
   // `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
   // <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
 
-  fp = flatpickr(calendarEl, {
-    locale: Italian,
-    wrap: true,
-    enable: ['1900-1-1'],
-  });
+  // fp = flatpickr(calendarEl, {
+  //   locale: Italian,
+  //   wrap: true,
+  //   enable: ['1900-1-1'],
+  // });
 
-  // let timerCounter = 0;
-  // let checkExist = setInterval(function () {
-  //   if (timerCounter > 10) {
-  //     clearInterval(checkExist);
-  //   }
-  //   timerCounter += 1;
-  //   if (document.querySelector($CALENDAR).length) {
-  //     clearInterval(checkExist);
-  //     s;
-  //     fp = flatpickr(calendarEl, {
-  //       locale: Italian,
-  //       wrap: true,
-  //       enable: ['1900-1-1'],
-  //     });
-  //   }
-  // }, 100);
+  let timerCounter = 0;
+  let checkExist = setInterval(() => {
+    if (timerCounter > 10) {
+      clearInterval(checkExist);
+    }
+    timerCounter += 1;
+    if (document.querySelector($CALENDAR).length) {
+      clearInterval(checkExist);
+      fp = flatpickr(calendarEl, {
+        locale: Italian,
+        wrap: true,
+        enable: ['1900-1-1'],
+      });
+    }
+  }, 100);
 };
 
 const setupDateButtons = () => {
