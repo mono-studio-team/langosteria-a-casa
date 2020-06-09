@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.994<<');
+console.log('>>langosteria@1.995<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -217,20 +217,25 @@ const setupCalendar = () => {
   // });
 
   let timerCounter = 0;
-  let checkExist = setInterval(() => {
-    if (timerCounter > 10) {
-      clearInterval(checkExist);
-    }
-    timerCounter += 1;
-    if (document.querySelector($CALENDAR).length) {
-      clearInterval(checkExist);
-      fp = flatpickr(calendarEl, {
-        locale: Italian,
-        wrap: true,
-        enable: ['1900-1-1'],
-      });
-    }
-  }, 100);
+  let checkExist = setInterval(
+    (function (fpRef) {
+      return function () {
+        if (timerCounter > 10) {
+          clearInterval(checkExist);
+        }
+        timerCounter += 1;
+        if (document.querySelector($CALENDAR).length) {
+          clearInterval(checkExist);
+          fpRef = flatpickr(calendarEl, {
+            locale: Italian,
+            wrap: true,
+            enable: ['1900-1-1'],
+          });
+        }
+      };
+    })(fp),
+    100
+  );
 };
 
 const setupDateButtons = () => {
