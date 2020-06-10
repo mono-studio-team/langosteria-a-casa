@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.999<<');
+console.log('>>langosteria@1.9990<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21438,7 +21438,6 @@ const setupCalendar = () => {
         clearInterval(checkExist);
         fpRef = (0, _flatpickr.default)(calendarEl, {
           locale: _it.Italian,
-          wrap: true,
           enable: ['1900-1-1']
         });
       }
