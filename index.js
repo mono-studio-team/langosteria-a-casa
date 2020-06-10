@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.9991<<');
+console.log('>>langosteria@1.9992<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -276,28 +276,33 @@ const setupDateButtons = () => {
 };
 
 const setupModeRadios = () => {
-  setInterval(function () {
-    const radios = document.querySelectorAll($MODE_RADIO);
-    if (radios[0].dataset.mode) return;
-    radios[0].setAttribute('data-mode', 'delivery');
-    radios[1].setAttribute('data-mode', 'pickup');
+  setInterval(
+    (function (updSt) {
+      return function () {
+        const radios = document.querySelectorAll($MODE_RADIO);
+        if (radios[0].dataset.mode) return;
+        radios[0].setAttribute('data-mode', 'delivery');
+        radios[1].setAttribute('data-mode', 'pickup');
 
-    const currentMode = document.querySelector(
-      'input[name=shipping-method-choice]:checked'
-    ).dataset.mode;
-    updateState({ type: 'mode', payload: currentMode });
+        const currentMode = document.querySelector(
+          'input[name=shipping-method-choice]:checked'
+        ).dataset.mode;
+        updSt({ type: 'mode', payload: currentMode });
 
-    radios.forEach(
-      (el) =>
-        (el.onchange = () => {
-          updateState([
-            { type: 'mode', payload: el.dataset.mode },
-            { type: 'date', payload: null },
-            { type: 'time', payload: null },
-          ]);
-        })
-    );
-  }, 1000);
+        radios.forEach(
+          (el) =>
+            (el.onchange = () => {
+              updSt([
+                { type: 'mode', payload: el.dataset.mode },
+                { type: 'date', payload: null },
+                { type: 'time', payload: null },
+              ]);
+            })
+        );
+      };
+    })(updateState),
+    1000
+  );
 };
 
 const load = async () => {
