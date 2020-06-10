@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.999<<');
+console.log('>>langosteria@1.9990<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -240,7 +240,6 @@ const setupCalendar = () => {
           clearInterval(checkExist);
           fpRef = flatpickr(calendarEl, {
             locale: Italian,
-            wrap: true,
             enable: ['1900-1-1'],
           });
         }
