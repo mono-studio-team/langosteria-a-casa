@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.99991<<');
+console.log('>>langosteria@1.99992<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -30,9 +30,8 @@ const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '#calendar';
 const $CHECKOUT_BUTTON = '#btn-checkout';
-// const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
-const $FAKE_NOTES = '#fakenotes';
+const $GHOST_ORDER_DETAILS = '#orderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
@@ -85,6 +84,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     el.classList.remove($CLASS_SELECTED);
     el.classList.remove($CLASS_DISABLED);
+    el.disabled = false;
 
     if (!date) {
       // do nothing
@@ -100,6 +100,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     if (el.disabled) {
       el.classList.add($CLASS_DISABLED);
+      el.disabled = true;
     }
 
     // update selected css
@@ -132,6 +133,7 @@ const updateCalendar = ({ availabilities, mode }) => {
 
     flatpickr($CALENDAR, {
       locale: Italian,
+      wrap: true,
       enable,
       onChange: (selectedDates, dateStr) =>
         updateState([
@@ -165,9 +167,11 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
 
     el.classList.remove($CLASS_SELECTED);
     el.classList.remove($CLASS_DISABLED);
+    el.disabled = false;
 
     if (el.disabled) {
       el.classList.add($CLASS_DISABLED);
+      el.disabled = true;
     }
 
     // update selected css
@@ -191,33 +195,40 @@ const updateCheckoutButton = ({ mode, date, time }) => {
   }
 };
 
-const setupCheckoutButton = () => {
-  document.querySelector($CHECKOUT_BUTTON).onclick = () => {
-    const { mode, date, time, notes } = state;
-    const dataString = JSON.stringify({ mode, date, time, notes });
-    document.querySelector($NOTES_TEXTAREA).value = dataString;
-  };
-};
+// const setupCheckoutButton = () => {
+//   document.querySelector($CHECKOUT_BUTTON).onclick = () => {
+//     const { mode, date, time, notes } = state;
+//     const dataString = JSON.stringify({ mode, date, time, notes });
+//     document.querySelector($NOTES_TEXTAREA).value = dataString;
+//   };
+// };
 
-const setupNotesListener = () => {
-  document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
-    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-  document.querySelector($NOTES_TEXTAREA).onchange = () =>
-    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-};
+// const setupNotesListener = () => {
+//   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
+//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+//   document.querySelector($NOTES_TEXTAREA).onchange = () =>
+//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+// };
 
-const setupFakeNotes = () => {
-  const realNotes = document.querySelector($NOTES_TEXTAREA);
+const setupGhostOrderDetails = () => {
+  const ghostOrderDetails = document.createElement('textarea');
+  ghostOrderDetails.id = 'orderDetails';
+  ghostOrderDetails.name = 'orderDetails';
+  document
+    .querySelector($NOTES_TEXTAREA)
+    .parentElement.appendChild(ghostOrderDetails);
+  ghostOrderDetails.style.display = 'none';
+
   // clone = realNotes.cloneNode(true); // true means clone all childNodes and all event handlers
-  const clone = realNotes.cloneNode(false);
-  clone.id = 'fakenotes';
-  realNotes.parentElement.appendChild(clone);
-  realNotes.style.display = 'none';
+  // const clone = realNotes.cloneNode(false);
+  // clone.id = 'fakenotes';
+  // clone.name = realNotes.parentElement.appendChild(clone);
+  // realNotes.style.display = 'none';
 
-  document.querySelector($FAKE_NOTES).onkeydown = () =>
-    updateNotes(document.querySelector($FAKE_NOTES).value);
-  document.querySelector($FAKE_NOTES).onchange = () =>
-    updateNotes(document.querySelector($FAKE_NOTES).value);
+  document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
+    updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+  document.querySelector($NOTES_TEXTAREA).onchange = () =>
+    updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
 };
 
 const setupTimeButtons = () => {
@@ -231,25 +242,23 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  const calendarEl = document.createElement('input');
-  calendarEl.id = 'calendar';
-  calendarEl.classList.add('text-block-2');
-  calendarEl.type = 'text';
-  calendarEl.placeholder = 'Calendario';
-  calendarEl.setAttribute('data-input', '');
+  // const calendarEl = document.createElement('input');
+  // calendarEl.id = 'calendar';
+  // calendarEl.classList.add('text-block-2');
+  // calendarEl.type = 'text';
+  // calendarEl.placeholder = 'Calendario';
+  // calendarEl.setAttribute('data-input', '');
+  // document.querySelector($CALENDAR_DIV).appendChild(calendarEl);
 
-  document.querySelector($CALENDAR_DIV).appendChild(calendarEl);
-  // document.querySelector($CALENDAR_DIV).innerHTML =
-  //   '<input id="calendar" class="text-block-2" type="text" placeholder="Calendario" data-input>';
+  document.querySelector($CALENDAR_DIV).innerHTML = `
+<div class="calendar">
+    <input type="text" class="text-block-2" placeholder="Calendario" data-input>
 
-  // `<input type="text" class="text-block-2" placeholder="Calendario" data-input>
-  // <button class="input-button button options w-button" title="toggle" data-toggle>...</button>`;
-
-  // fp = flatpickr(calendarEl, {
-  //   locale: Italian,
-  //   wrap: true,
-  //   enable: ['1900-1-1'],
-  // });
+    <button class="input-button button options w-button" title="toggle" data-toggle>
+        ...
+    </button>
+</div>
+  `;
 
   let timerCounter = 0;
   let checkExist = setInterval(function () {
@@ -261,6 +270,7 @@ const setupCalendar = () => {
       clearInterval(checkExist);
       flatpickr(calendarEl, {
         locale: Italian,
+        wrap: true,
         enable: ['1900-1-1'],
       });
     }
@@ -371,7 +381,7 @@ const load = async () => {
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
-  setupFakeNotes();
+  setupGhostOrderDetails();
   // setupNotesListener();
   // setupCheckoutButton();
 };
