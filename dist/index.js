@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.9999<<');
+console.log('>>langosteria@1.99990<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21222,14 +21222,15 @@ const $CALENDAR = '#calendar';
 const $CHECKOUT_BUTTON = '#btn-checkout'; // const $FAKE_NOTES_TEXTAREA = '#fake-notes';
 
 const $NOTES_TEXTAREA = 'textarea[name=note]';
+const $FAKE_NOTES = '#fakenotes';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 let state = {
   availabilities: [],
   mode: 'delivery',
   date: null,
-  time: null,
-  notes: ''
+  time: null // notes: '',
+
 };
 
 const updateState = actions => {
@@ -21257,10 +21258,19 @@ const updateState = actions => {
 };
 
 const updateNotes = notes => {
-  const nextState = { ...state,
+  const {
+    mode,
+    date,
+    time
+  } = state;
+  const dataString = JSON.stringify({
+    mode,
+    date,
+    time,
     notes
-  };
-  state = nextState;
+  });
+  document.querySelector($NOTES_TEXTAREA).value = dataString; // const nextState = { ...state, notes };
+  // state = nextState;
 };
 
 const updateDateButtons = ({
@@ -21379,8 +21389,6 @@ const updateCheckoutButton = ({
 };
 
 const setupCheckoutButton = () => {
-  const originalOnClick = document.querySelector($CHECKOUT_BUTTON).onclick;
-
   document.querySelector($CHECKOUT_BUTTON).onclick = () => {
     const {
       mode,
@@ -21395,7 +21403,6 @@ const setupCheckoutButton = () => {
       notes
     });
     document.querySelector($NOTES_TEXTAREA).value = dataString;
-    originalOnClick();
   };
 };
 
@@ -21403,6 +21410,19 @@ const setupNotesListener = () => {
   document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($NOTES_TEXTAREA).value);
 
   document.querySelector($NOTES_TEXTAREA).onchange = () => updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+};
+
+const setupFakeNotes = () => {
+  const realNotes = document.querySelector($NOTES_TEXTAREA); // clone = realNotes.cloneNode(true); // true means clone all childNodes and all event handlers
+
+  clone = realNotes.cloneNode(false);
+  clone.id = 'fakenotes';
+  realNotes.parentElement.appendChild(clone);
+  realNotes.style.display = 'none';
+
+  document.querySelector($FAKE_NOTES).onkeydown = () => updateNotes(document.querySelector($FAKE_NOTES).value);
+
+  document.querySelector($FAKE_NOTES).onchange = () => updateNotes(document.querySelector($FAKE_NOTES).value);
 };
 
 const setupTimeButtons = () => {
@@ -21542,8 +21562,8 @@ const load = async () => {
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
-  setupNotesListener();
-  setupCheckoutButton();
+  setupFakeNotes(); // setupNotesListener();
+  // setupCheckoutButton();
 };
 
 intervalId = setInterval(function () {
