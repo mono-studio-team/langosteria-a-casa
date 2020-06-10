@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.9993<<');
+console.log('>>langosteria@1.9994<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21380,20 +21380,23 @@ const updateCheckoutButton = ({
 
 const setupCheckoutButton = () => {
   const originalOnClick = document.querySelector($CHECKOUT_BUTTON).onclick;
-  const {
-    mode,
-    date,
-    time,
-    notes
-  } = state;
-  const dataString = JSON.stringify({
-    mode,
-    date,
-    time,
-    notes
-  });
-  document.querySelector($NOTES_TEXTAREA).value = dataString;
-  originalOnClick();
+
+  document.querySelector($CHECKOUT_BUTTON).onclick = () => {
+    const {
+      mode,
+      date,
+      time,
+      notes
+    } = state;
+    const dataString = JSON.stringify({
+      mode,
+      date,
+      time,
+      notes
+    });
+    document.querySelector($NOTES_TEXTAREA).value = dataString;
+    originalOnClick();
+  };
 };
 
 const setupNotesListener = () => {
