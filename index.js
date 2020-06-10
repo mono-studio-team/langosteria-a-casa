@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.9992<<');
+console.log('>>langosteria@1.9993<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -287,7 +287,7 @@ const setupModeRadios = () => {
         const currentMode = document.querySelector(
           'input[name=shipping-method-choice]:checked'
         ).dataset.mode;
-        updSt({ type: 'mode', payload: currentMode });
+        updSt([{ type: 'mode', payload: currentMode }]);
 
         radios.forEach(
           (el) =>
