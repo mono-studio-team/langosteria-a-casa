@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.9996<<');
+console.log('>>langosteria@1.9997<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -84,9 +84,13 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
     if (!date) {
       // do nothing
     } else if (mode === 'delivery') {
-      el.disabled = !(availability.delivery1Cap || availability.delivery2Cap);
+      el.disabled = !(
+        availability.d1Availability || availability.d2Availability
+      );
     } else {
-      el.disabled = !(availability.delivery1Cap || availability.delivery2Cap);
+      el.disabled = !(
+        availability.p1Availability || availability.p2Availability
+      );
     }
 
     if (el.disabled) {
@@ -106,9 +110,12 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
 const updateCalendar = ({ availabilities, mode }) => {
   const enable = availabilities.reduce((res, curr) => {
-    if (mode === 'delivery' && (curr.delivery1Cap || curr.delivery2Cap)) {
+    if (mode === 'delivery' && (curr.d1Availability || curr.d2Availability)) {
       return [curr.dateFlatpickr, ...res];
-    } else if (mode === 'pickup' && (curr.pickup1Cap || curr.pickup2Cap)) {
+    } else if (
+      mode === 'pickup' &&
+      (curr.p1Availability || curr.p2Availability)
+    ) {
       return [curr.dateFlatpickr, ...res];
     }
     return res;
@@ -142,13 +149,13 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
     } else if (mode === 'delivery') {
       el.disabled =
         el.dataset.timeslot === 1
-          ? !selectedAvailability.delivery1Cap
-          : !selectedAvailability.delivery2Cap;
+          ? !selectedAvailability.d1Availability
+          : !selectedAvailability.d2Availability;
     } else {
       el.disabled =
         el.dataset.timeslot === 2
-          ? !selectedAvailability.pickup1Cap
-          : !selectedAvailability.pickup2Cap;
+          ? !selectedAvailability.p1Availability
+          : !selectedAvailability.p2Availability;
     }
 
     el.classList.remove($CLASS_SELECTED);
