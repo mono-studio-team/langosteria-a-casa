@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.9998<<');
+console.log('>>langosteria@1.9999<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -198,12 +198,10 @@ const setupCheckoutButton = () => {
 };
 
 const setupNotesListener = () => {
-  document.querySelector($NOTES_TEXTAREA).onkeydown = updateNotes(
-    document.querySelector($NOTES_TEXTAREA).value
-  );
-  document.querySelector($NOTES_TEXTAREA).onchange = updateNotes(
-    document.querySelector($NOTES_TEXTAREA).value
-  );
+  document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
+    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+  document.querySelector($NOTES_TEXTAREA).onchange = () =>
+    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
 };
 
 const setupTimeButtons = () => {
