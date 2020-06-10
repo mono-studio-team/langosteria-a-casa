@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.9990<<');
+console.log('>>langosteria@1.9991<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21473,6 +21473,11 @@ const setupModeRadios = () => {
     if (radios[0].dataset.mode) return;
     radios[0].setAttribute('data-mode', 'delivery');
     radios[1].setAttribute('data-mode', 'pickup');
+    const currentMode = document.querySelector('input[name=shipping-method-choice]:checked').dataset.mode;
+    updateState({
+      type: 'mode',
+      payload: currentMode
+    });
     radios.forEach(el => el.onchange = () => {
       updateState([{
         type: 'mode',
