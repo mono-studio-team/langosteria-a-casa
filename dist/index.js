@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.99990<<');
+console.log('>>langosteria@1.99991<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21415,7 +21415,7 @@ const setupNotesListener = () => {
 const setupFakeNotes = () => {
   const realNotes = document.querySelector($NOTES_TEXTAREA); // clone = realNotes.cloneNode(true); // true means clone all childNodes and all event handlers
 
-  clone = realNotes.cloneNode(false);
+  const clone = realNotes.cloneNode(false);
   clone.id = 'fakenotes';
   realNotes.parentElement.appendChild(clone);
   realNotes.style.display = 'none';
