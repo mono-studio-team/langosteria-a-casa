@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.99992<<');
+console.log('>>langosteria@1.99993<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21429,22 +21429,21 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  // const calendarEl = document.createElement('input');
-  // calendarEl.id = 'calendar';
-  // calendarEl.classList.add('text-block-2');
-  // calendarEl.type = 'text';
-  // calendarEl.placeholder = 'Calendario';
-  // calendarEl.setAttribute('data-input', '');
-  // document.querySelector($CALENDAR_DIV).appendChild(calendarEl);
-  document.querySelector($CALENDAR_DIV).innerHTML = `
-<div class="calendar">
-    <input type="text" class="text-block-2" placeholder="Calendario" data-input>
+  const calendarEl = document.createElement('input');
+  calendarEl.id = 'calendar';
+  calendarEl.classList.add('text-block-2');
+  calendarEl.type = 'text';
+  calendarEl.placeholder = 'Calendario';
+  calendarEl.setAttribute('data-input', '');
+  document.querySelector($CALENDAR_DIV).appendChild(calendarEl); //   document.querySelector($CALENDAR_DIV).innerHTML = `
+  // <div class="calendar">
+  //     <input type="text" class="text-block-2" placeholder="Calendario" data-input>
+  //     <button class="input-button button options w-button" title="toggle" data-toggle>
+  //         ...
+  //     </button>
+  // </div>
+  //   `;
 
-    <button class="input-button button options w-button" title="toggle" data-toggle>
-        ...
-    </button>
-</div>
-  `;
   let timerCounter = 0;
   let checkExist = setInterval(function () {
     if (timerCounter > 10) {
