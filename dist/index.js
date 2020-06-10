@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.9994<<');
+console.log('>>langosteria@1.9995<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21224,7 +21224,6 @@ const $CHECKOUT_BUTTON = '#btn-checkout'; // const $FAKE_NOTES_TEXTAREA = '#fake
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
-let fp;
 let state = {
   availabilities: [],
   mode: 'delivery',
@@ -21311,6 +21310,8 @@ const updateCalendar = ({
 
     return res;
   }, []);
+
+  const fp = document.querySelector($CALENDAR)._flatpickr;
 
   if (fp && fp.destroy) {
     fp.destroy();
@@ -21429,23 +21430,21 @@ const setupCalendar = () => {
   // });
 
   let timerCounter = 0;
-  let checkExist = setInterval(function (fpRef) {
-    return function () {
-      if (timerCounter > 10) {
-        clearInterval(checkExist);
-      }
+  let checkExist = setInterval(function () {
+    if (timerCounter > 10) {
+      clearInterval(checkExist);
+    }
 
-      timerCounter += 1;
+    timerCounter += 1;
 
-      if (document.querySelector($CALENDAR)) {
-        clearInterval(checkExist);
-        fpRef = (0, _flatpickr.default)(calendarEl, {
-          locale: _it.Italian,
-          enable: ['1900-1-1']
-        });
-      }
-    };
-  }(fp), 100);
+    if (document.querySelector($CALENDAR)) {
+      clearInterval(checkExist);
+      (0, _flatpickr.default)(calendarEl, {
+        locale: _it.Italian,
+        enable: ['1900-1-1']
+      });
+    }
+  }, 100);
 };
 
 const setupDateButtons = () => {
