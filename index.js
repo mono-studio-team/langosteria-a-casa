@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.9997<<');
+console.log('>>langosteria@1.9998<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -148,12 +148,12 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
       // do nothing
     } else if (mode === 'delivery') {
       el.disabled =
-        el.dataset.timeslot === 1
+        el.dataset.timeslot === '1'
           ? !selectedAvailability.d1Availability
           : !selectedAvailability.d2Availability;
     } else {
       el.disabled =
-        el.dataset.timeslot === 2
+        el.dataset.timeslot === '2'
           ? !selectedAvailability.p1Availability
           : !selectedAvailability.p2Availability;
     }

@@ -21200,7 +21200,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@1.9997<<');
+console.log('>>langosteria@1.9998<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21340,9 +21340,9 @@ const updateTimeButtons = ({
     // update enabled/disabled
     if (!date) {// do nothing
     } else if (mode === 'delivery') {
-      el.disabled = el.dataset.timeslot === 1 ? !selectedAvailability.d1Availability : !selectedAvailability.d2Availability;
+      el.disabled = el.dataset.timeslot === '1' ? !selectedAvailability.d1Availability : !selectedAvailability.d2Availability;
     } else {
-      el.disabled = el.dataset.timeslot === 2 ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
+      el.disabled = el.dataset.timeslot === '2' ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
     }
 
     el.classList.remove($CLASS_SELECTED);
