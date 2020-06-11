@@ -1,11 +1,17 @@
 import flatpickr from 'flatpickr';
 import { Italian } from 'flatpickr/dist/l10n/it.js';
-const { addDays, format, isToday, isAfter } = require('date-fns');
+const {
+  addDays,
+  format,
+  isToday,
+  isAfter,
+  differenceInCalendarDays,
+} = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.99995<<');
+console.log('>>langosteria@0.56<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -82,31 +88,35 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
       (a) => a.dateFlatpickr === el.dataset.date
     );
 
+    // clean
     el.classList.remove($CLASS_SELECTED);
     el.classList.remove($CLASS_DISABLED);
-    el.disabled = false;
+    el.style.pointerEvents = null;
 
-    if (!date) {
-      // do nothing
-    } else if (mode === 'delivery') {
-      el.disabled = !(
-        availability.d1Availability || availability.d2Availability
-      );
-    } else {
-      el.disabled = !(
-        availability.p1Availability || availability.p2Availability
-      );
+    let isDisabled;
+    if (
+      date &&
+      mode === 'delivery' &&
+      !availability.d1Availability &&
+      !availability.d2Availability
+    ) {
+      isDisabled = true;
+    } else if (
+      date &&
+      mode === 'pickup' &&
+      !availability.p1Availability &&
+      !availability.p2Availability
+    ) {
+      isDisabled = true;
     }
 
-    if (el.disabled) {
+    if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
-      el.disabled = true;
+      el.style.pointerEvents = 'none';
     }
 
     // update selected css
-    if (!date) {
-      el.classList.remove($CLASS_SELECTED);
-    } else if (el.dataset.date === selectedAvailability.dateFlatpickr) {
+    if (el.dataset.date === selectedAvailability.dateFlatpickr) {
       el.classList.add($CLASS_SELECTED);
     } else {
       el.classList.remove($CLASS_SELECTED);
@@ -132,11 +142,14 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     fp.destroy();
   }
 
+  // const difference = differenceInCalendarDays(date, new Date());
+
   flatpickr($CALENDAR, {
     locale: Italian,
     wrap: true,
     enable,
     defaultDate: date,
+    dateFormat: 'j/n/Y',
     onChange: (selectedDates, dateStr) =>
       updateState([
         { type: 'date', payload: dateStr },
@@ -151,28 +164,28 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
   );
 
   document.querySelectorAll($TIME_BUTTONS).forEach((el) => {
+    // clean
+    el.classList.remove($CLASS_SELECTED);
+    el.classList.remove($CLASS_DISABLED);
+    el.style.pointerEvents = null;
+
     // update enabled/disabled
-    if (!date) {
-      // do nothing
-    } else if (mode === 'delivery') {
-      el.disabled =
+    let isDisabled;
+    if (date && mode === 'delivery') {
+      isDisabled =
         el.dataset.timeslot === '1'
           ? !selectedAvailability.d1Availability
           : !selectedAvailability.d2Availability;
-    } else {
-      el.disabled =
+    } else if (date && mode === 'pickup') {
+      isDisabled =
         el.dataset.timeslot === '2'
           ? !selectedAvailability.p1Availability
           : !selectedAvailability.p2Availability;
     }
 
-    el.classList.remove($CLASS_SELECTED);
-    el.classList.remove($CLASS_DISABLED);
-    el.disabled = false;
-
-    if (el.disabled) {
+    if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
-      el.disabled = true;
+      el.style.pointerEvents = 'none';
     }
 
     // update selected css
@@ -188,10 +201,11 @@ const updateTimeButtons = ({ availabilities, mode, date, time }) => {
 
 const updateCheckoutButton = ({ mode, date, time }) => {
   const isOk = mode && date && time;
-  document.querySelector($CHECKOUT_BUTTON).disabled = !isOk;
   if (isOk) {
+    document.querySelector('#btn-checkout').style.pointerEvents = null;
     document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
   } else {
+    document.querySelector('#btn-checkout').style.pointerEvents = 'none';
     document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
   }
 };
@@ -242,42 +256,12 @@ const setupTimeButtons = () => {
     );
 };
 
-const setupCalendar = () => {
-  // const calendarEl = document.createElement('input');
-  // calendarEl.classList.add('text-block-2');
-  // calendarEl.type = 'text';
-  // calendarEl.placeholder = 'Calendario';
-  // calendarEl.setAttribute('data-input', '');
-  // document.querySelector('.flatpickr').appendChild(calendarEl);
-
-  // const calBtn = document.createElement('a');
-  // calBtn.classList.add('button');
-  // calBtn.classList.add('w-button');
-  // calBtn.textContent = '...';
-  // document.querySelector('.flatpickr').appendChild(calBtn);
-
-  document.querySelector($CALENDAR).innerHTML = `
-  <input class="text-block-2" type="text" placeholder="Select Date.." data-input>
+const setupCalendar = () =>
+  (document.querySelector($CALENDAR).innerHTML = `
+  <input class="button options" type="text" placeholder="altra data" data-input>
 
   <a class="button options input-button" title="toggle" data-toggle>...</a>
-  `;
-
-  // let timerCounter = 0;
-  // let checkExist = setInterval(function () {
-  //   if (timerCounter > 10) {
-  //     clearInterval(checkExist);
-  //   }
-  //   timerCounter += 1;
-  //   if (document.querySelector($CALENDAR)) {
-  //     clearInterval(checkExist);
-  //     flatpickr('.flatpickr', {
-  //       wrap: true,
-  //       locale: Italian,
-  //       enable: ['1900-1-1'],
-  //     });
-  //   }
-  // }, 100);
-};
+  `);
 
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
