@@ -21239,7 +21239,7 @@ const {
 require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
 
 
-console.log('>>langosteria@0.57<<');
+console.log('>>langosteria@0.58<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21373,7 +21373,8 @@ const updateCalendar = ({
     wrap: true,
     enable,
     defaultDate: date,
-    dateFormat: 'j/n/Y',
+    altInput: true,
+    altFormat: 'j/n/Y',
     onChange: (selectedDates, dateStr) => updateState([{
       type: 'date',
       payload: dateStr
@@ -21634,7 +21635,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63858" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53684" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
