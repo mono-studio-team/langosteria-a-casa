@@ -11,7 +11,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@0.56<<');
+console.log('>>langosteria@0.57<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -23,12 +23,8 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
 
-// const codaViewIds = {
-//   next3days: 'table-gzB6L_u3ML',
-// };
-
-// const filterPickups = (i) => i.nome.startsWith('Pickup');
-// const filterDeliveries = (i) => i.nome.startsWith('Delivery');
+const filterPickups = (i) => i.nome.startsWith('Pickup');
+const filterDeliveries = (i) => i.nome.startsWith('Delivery');
 
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
@@ -42,6 +38,8 @@ const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
 let state = {
+  pickups: [],
+  deliveries: [],
   availabilities: [],
   mode: 'delivery',
   date: null,
@@ -116,10 +114,11 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
     }
 
     // update selected css
-    if (el.dataset.date === selectedAvailability.dateFlatpickr) {
+    if (
+      selectedAvailability &&
+      el.dataset.date === selectedAvailability.dateFlatpickr
+    ) {
       el.classList.add($CLASS_SELECTED);
-    } else {
-      el.classList.remove($CLASS_SELECTED);
     }
   });
 };
@@ -158,16 +157,29 @@ const updateCalendar = ({ availabilities, mode, date }) => {
   });
 };
 
-const updateTimeButtons = ({ availabilities, mode, date, time }) => {
+const updateTimeButtons = ({
+  pickups,
+  deliveries,
+  availabilities,
+  mode,
+  date,
+  time,
+}) => {
   const selectedAvailability = availabilities.find(
     (a) => a.dateFlatpickr === date
   );
 
-  document.querySelectorAll($TIME_BUTTONS).forEach((el) => {
+  document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
     // clean
     el.classList.remove($CLASS_SELECTED);
     el.classList.remove($CLASS_DISABLED);
     el.style.pointerEvents = null;
+
+    if (mode === 'delivery') {
+      el.textContent = deliveries[idx].label;
+    } else {
+      el.textContent = pickups[idx].label;
+    }
 
     // update enabled/disabled
     let isDisabled;
@@ -328,17 +340,12 @@ const load = async () => {
   const { getTableData, getViewData } = coda(axiosInstance);
 
   // GET DATA FROM CODA
-  // const servicesObj = await getTableData({
-  //   docId: condaDocId,
-  //   tableIdOrName: condaTableIds.settingsServices,
-  // });
-  // const pickups = servicesObj.filter(filterPickups);
-  // const deliveries = servicesObj.filter(filterDeliveries);
-
-  // const next3Days = await getViewData({
-  //   docId: condaDocId,
-  //   viewIdOrName: codaViewIds.next3days,
-  // });
+  const servicesObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsServices,
+  });
+  const pickups = servicesObj.filter(filterPickups);
+  const deliveries = servicesObj.filter(filterDeliveries);
 
   const addresses = await getTableData({
     docId: condaDocId,
@@ -356,7 +363,11 @@ const load = async () => {
       isAfter(new Date(a.dateFlatpickr), new Date())
   );
 
-  updateState([{ type: 'availabilities', payload: nextAvailabilities }]);
+  updateState([
+    { type: 'availabilities', payload: nextAvailabilities },
+    { type: 'pickups', payload: pickups },
+    { type: 'deliveries', payload: deliveries },
+  ]);
 
   // console.log('pickups', pickups);
   // console.log('deliveries', deliveries);
