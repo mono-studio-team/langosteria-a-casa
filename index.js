@@ -5,13 +5,13 @@ const {
   format,
   isToday,
   isAfter,
+  parse,
   differenceInCalendarDays,
 } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
-// require('./useMaps');
 
-console.log('>>langosteria@0.58<<');
+console.log('>>langosteria@0.61<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -31,6 +31,7 @@ const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '.flatpickr';
+const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
@@ -141,7 +142,15 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     fp.destroy();
   }
 
-  // const difference = differenceInCalendarDays(date, new Date());
+  const selDate = parse(date, 'yyyy-MM-dd', new Date());
+  const difference = differenceInCalendarDays(selDate, new Date());
+  console.log(difference);
+
+  if (difference >= 3) {
+    document.querySelector($CALENDAR_BTN).classList.add($CLASS_SELECTED);
+  } else {
+    document.querySelector($CALENDAR_BTN).classList.remove($CLASS_SELECTED);
+  }
 
   flatpickr($CALENDAR, {
     locale: Italian,
@@ -150,6 +159,7 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     defaultDate: date,
     altInput: true,
     altFormat: 'j/n/Y',
+    altInputClass: 'button options',
     onChange: (selectedDates, dateStr) =>
       updateState([
         { type: 'date', payload: dateStr },
@@ -213,30 +223,9 @@ const updateTimeButtons = ({
 };
 
 const updateCheckoutButton = ({ mode, date, time }) => {
-  const isOk = mode && date && time;
-  if (isOk) {
-    document.querySelector('#btn-checkout').style.pointerEvents = null;
-    document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
-  } else {
-    document.querySelector('#btn-checkout').style.pointerEvents = 'none';
-    document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
-  }
+  const visibility = mode && date && time ? 'visible' : 'hidden';
+  document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
 };
-
-// const setupCheckoutButton = () => {
-//   document.querySelector($CHECKOUT_BUTTON).onclick = () => {
-//     const { mode, date, time, notes } = state;
-//     const dataString = JSON.stringify({ mode, date, time, notes });
-//     document.querySelector($NOTES_TEXTAREA).value = dataString;
-//   };
-// };
-
-// const setupNotesListener = () => {
-//   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
-//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-//   document.querySelector($NOTES_TEXTAREA).onchange = () =>
-//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-// };
 
 const setupGhostOrderDetails = () => {
   const ghostOrderDetails = document.createElement('textarea');
@@ -246,12 +235,6 @@ const setupGhostOrderDetails = () => {
     .querySelector($NOTES_TEXTAREA)
     .parentElement.appendChild(ghostOrderDetails);
   ghostOrderDetails.style.display = 'none';
-
-  // clone = realNotes.cloneNode(true); // true means clone all childNodes and all event handlers
-  // const clone = realNotes.cloneNode(false);
-  // clone.id = 'fakenotes';
-  // clone.name = realNotes.parentElement.appendChild(clone);
-  // realNotes.style.display = 'none';
 
   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
     updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
@@ -273,7 +256,7 @@ const setupCalendar = () =>
   (document.querySelector($CALENDAR).innerHTML = `
   <input class="button options" type="text" placeholder="altra data" data-input>
 
-  <a class="button options input-button" title="toggle" data-toggle>...</a>
+  <a id="calendar-btn" class="button options input-button" title="toggle" data-toggle>...</a>
   `);
 
 const setupDateButtons = () => {
@@ -380,8 +363,6 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostOrderDetails();
-  // setupNotesListener();
-  // setupCheckoutButton();
 };
 
 intervalId = setInterval(function () {
@@ -391,15 +372,3 @@ intervalId = setInterval(function () {
     load();
   }
 }, 1000);
-
-// const routeStreetNumber = document.querySelector('#route_street_number');
-
-// if (!routeStreetNumber.value) {
-//   routeStreetNumber.onkeydown = (e) => {
-//     console.log('checking', routeStreetNumber.value);
-//     if (routeStreetNumber.value !== '') {
-//       load();
-//       routeStreetNumber.onkeydown = null;
-//     }
-//   };
-// }

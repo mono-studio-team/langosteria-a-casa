@@ -21191,6 +21191,7 @@ const {
   format,
   isToday,
   isAfter,
+  parse,
   differenceInCalendarDays
 } = require('date-fns');
 
@@ -21198,10 +21199,9 @@ const {
   default: itLocalize
 } = require('date-fns/locale/it');
 
-require('flatpickr/dist/themes/airbnb.css'); // require('./useMaps');
+require('flatpickr/dist/themes/airbnb.css');
 
-
-console.log('>>langosteria@0.58<<');
+console.log('>>langosteria@0.61<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21220,6 +21220,7 @@ const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '.flatpickr';
+const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
@@ -21327,8 +21328,17 @@ const updateCalendar = ({
 
   if (fp && fp.destroy) {
     fp.destroy();
-  } // const difference = differenceInCalendarDays(date, new Date());
+  }
 
+  const selDate = parse(date, 'yyyy-MM-dd', new Date());
+  const difference = differenceInCalendarDays(selDate, new Date());
+  console.log(difference);
+
+  if (difference >= 3) {
+    document.querySelector($CALENDAR_BTN).classList.add($CLASS_SELECTED);
+  } else {
+    document.querySelector($CALENDAR_BTN).classList.remove($CLASS_SELECTED);
+  }
 
   (0, _flatpickr.default)($CALENDAR, {
     locale: _it.Italian,
@@ -21337,6 +21347,7 @@ const updateCalendar = ({
     defaultDate: date,
     altInput: true,
     altFormat: 'j/n/Y',
+    altInputClass: 'button options',
     onChange: (selectedDates, dateStr) => updateState([{
       type: 'date',
       payload: dateStr
@@ -21398,40 +21409,16 @@ const updateCheckoutButton = ({
   date,
   time
 }) => {
-  const isOk = mode && date && time;
-
-  if (isOk) {
-    document.querySelector('#btn-checkout').style.pointerEvents = null;
-    document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
-  } else {
-    document.querySelector('#btn-checkout').style.pointerEvents = 'none';
-    document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
-  }
-}; // const setupCheckoutButton = () => {
-//   document.querySelector($CHECKOUT_BUTTON).onclick = () => {
-//     const { mode, date, time, notes } = state;
-//     const dataString = JSON.stringify({ mode, date, time, notes });
-//     document.querySelector($NOTES_TEXTAREA).value = dataString;
-//   };
-// };
-// const setupNotesListener = () => {
-//   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
-//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-//   document.querySelector($NOTES_TEXTAREA).onchange = () =>
-//     updateNotes(document.querySelector($NOTES_TEXTAREA).value);
-// };
-
+  const visibility = mode && date && time ? 'visible' : 'hidden';
+  document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
+};
 
 const setupGhostOrderDetails = () => {
   const ghostOrderDetails = document.createElement('textarea');
   ghostOrderDetails.id = 'orderDetails';
   ghostOrderDetails.name = 'orderDetails';
   document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostOrderDetails);
-  ghostOrderDetails.style.display = 'none'; // clone = realNotes.cloneNode(true); // true means clone all childNodes and all event handlers
-  // const clone = realNotes.cloneNode(false);
-  // clone.id = 'fakenotes';
-  // clone.name = realNotes.parentElement.appendChild(clone);
-  // realNotes.style.display = 'none';
+  ghostOrderDetails.style.display = 'none';
 
   document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
 
@@ -21448,7 +21435,7 @@ const setupTimeButtons = () => {
 const setupCalendar = () => document.querySelector($CALENDAR).innerHTML = `
   <input class="button options" type="text" placeholder="altra data" data-input>
 
-  <a class="button options input-button" title="toggle" data-toggle>...</a>
+  <a id="calendar-btn" class="button options input-button" title="toggle" data-toggle>...</a>
   `;
 
 const setupDateButtons = () => {
@@ -21548,8 +21535,7 @@ const load = async () => {
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
-  setupGhostOrderDetails(); // setupNotesListener();
-  // setupCheckoutButton();
+  setupGhostOrderDetails();
 };
 
 intervalId = setInterval(function () {
@@ -21559,16 +21545,7 @@ intervalId = setInterval(function () {
     console.log('radios found!');
     load();
   }
-}, 1000); // const routeStreetNumber = document.querySelector('#route_street_number');
-// if (!routeStreetNumber.value) {
-//   routeStreetNumber.onkeydown = (e) => {
-//     console.log('checking', routeStreetNumber.value);
-//     if (routeStreetNumber.value !== '') {
-//       load();
-//       routeStreetNumber.onkeydown = null;
-//     }
-//   };
-// }
+}, 1000);
 },{"flatpickr":"rx2B","flatpickr/dist/l10n/it.js":"wksl","date-fns":"IY9X","date-fns/locale/it":"ZO3b","flatpickr/dist/themes/airbnb.css":"LEYW","_bundle_loader":"Fzvl","./useAxios":[["useAxios.a4fcc095.js","KB3V"],"useAxios.a4fcc095.js.map","KB3V"],"./useCoda":[["useCoda.023e10c7.js","Negm"],"useCoda.023e10c7.js.map","Negm"]}],"pIj2":[function(require,module,exports) {
 module.exports = function loadJSBundle(bundle) {
   return new Promise(function (resolve, reject) {
