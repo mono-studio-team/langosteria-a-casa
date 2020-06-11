@@ -5,7 +5,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 // require('./useMaps');
 
-console.log('>>langosteria@1.99994<<');
+console.log('>>langosteria@1.99995<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -28,7 +28,7 @@ const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_DIV = '#calendar-div';
-const $CALENDAR = '#calendar';
+const $CALENDAR = '.flatpickr';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
@@ -114,7 +114,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
   });
 };
 
-const updateCalendar = ({ availabilities, mode }) => {
+const updateCalendar = ({ availabilities, mode, date }) => {
   const enable = availabilities.reduce((res, curr) => {
     if (mode === 'delivery' && (curr.d1Availability || curr.d2Availability)) {
       return [curr.dateFlatpickr, ...res];
@@ -130,17 +130,19 @@ const updateCalendar = ({ availabilities, mode }) => {
   const fp = document.querySelector($CALENDAR)._flatpickr;
   if (fp && fp.destroy) {
     fp.destroy();
-
-    flatpickr($CALENDAR, {
-      locale: Italian,
-      enable,
-      onChange: (selectedDates, dateStr) =>
-        updateState([
-          { type: 'date', payload: dateStr },
-          { type: 'time', payload: null },
-        ]),
-    });
   }
+
+  flatpickr($CALENDAR, {
+    locale: Italian,
+    wrap: true,
+    enable,
+    defaultDate: date,
+    onChange: (selectedDates, dateStr) =>
+      updateState([
+        { type: 'date', payload: dateStr },
+        { type: 'time', payload: null },
+      ]),
+  });
 };
 
 const updateTimeButtons = ({ availabilities, mode, date, time }) => {
@@ -241,38 +243,40 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  const calendarEl = document.createElement('input');
-  calendarEl.id = 'calendar';
-  calendarEl.classList.add('text-block-2');
-  calendarEl.type = 'text';
-  calendarEl.placeholder = 'Calendario';
-  calendarEl.setAttribute('data-input', '');
-  document.querySelector($CALENDAR_DIV).appendChild(calendarEl);
+  // const calendarEl = document.createElement('input');
+  // calendarEl.classList.add('text-block-2');
+  // calendarEl.type = 'text';
+  // calendarEl.placeholder = 'Calendario';
+  // calendarEl.setAttribute('data-input', '');
+  // document.querySelector('.flatpickr').appendChild(calendarEl);
 
-  //   document.querySelector($CALENDAR_DIV).innerHTML = `
-  // <div class="calendar">
-  //     <input type="text" class="text-block-2" placeholder="Calendario" data-input>
+  // const calBtn = document.createElement('a');
+  // calBtn.classList.add('button');
+  // calBtn.classList.add('w-button');
+  // calBtn.textContent = '...';
+  // document.querySelector('.flatpickr').appendChild(calBtn);
 
-  //     <button class="input-button button options w-button" title="toggle" data-toggle>
-  //         ...
-  //     </button>
-  // </div>
-  //   `;
+  document.querySelector($CALENDAR).innerHTML = `
+  <input class="text-block-2" type="text" placeholder="Select Date.." data-input>
 
-  let timerCounter = 0;
-  let checkExist = setInterval(function () {
-    if (timerCounter > 10) {
-      clearInterval(checkExist);
-    }
-    timerCounter += 1;
-    if (document.querySelector($CALENDAR)) {
-      clearInterval(checkExist);
-      flatpickr(calendarEl, {
-        locale: Italian,
-        enable: ['1900-1-1'],
-      });
-    }
-  }, 100);
+  <a class="button options input-button" title="toggle" data-toggle>...</a>
+  `;
+
+  // let timerCounter = 0;
+  // let checkExist = setInterval(function () {
+  //   if (timerCounter > 10) {
+  //     clearInterval(checkExist);
+  //   }
+  //   timerCounter += 1;
+  //   if (document.querySelector($CALENDAR)) {
+  //     clearInterval(checkExist);
+  //     flatpickr('.flatpickr', {
+  //       wrap: true,
+  //       locale: Italian,
+  //       enable: ['1900-1-1'],
+  //     });
+  //   }
+  // }, 100);
 };
 
 const setupDateButtons = () => {
