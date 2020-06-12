@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.71');
+console.log('||> langosteria v0.72');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -245,7 +245,9 @@ const updateTimeButtons = ({
 
     // enabled/disabled
     let isDisabled;
-    if (date && mode === 'delivery') {
+    if (!date) {
+      isDisabled = true;
+    } else if (date && mode === 'delivery') {
       isDisabled =
         el.dataset.timeslot === '1'
           ? !selectedAvailability.d1Availability
