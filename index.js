@@ -376,16 +376,16 @@ const setupDateButtons = () => {
 
 const setupModeRadios = () => {
   setInterval(
-    function (getStore, updState) {
+    function (getState, updState) {
       const radios = document.querySelectorAll($MODE_RADIO);
       if (radios[0].dataset.mode) return;
       radios[0].setAttribute('data-mode', 'delivery');
       radios[1].setAttribute('data-mode', 'pickup');
 
-      const st = getStore();
+      const st = getState();
       if (st.mode === 'delivery') {
         document.querySelector('input[data-mode=delivery]').checked = true;
-      } else {
+      } else if (st.mode === 'pickup') {
         document.querySelector('input[data-mode=pickup]').checked = true;
       }
 
@@ -406,12 +406,12 @@ const setupModeRadios = () => {
       );
     },
     1000,
-    getStore,
+    getState,
     updateState
   );
 };
 
-const getStore = () => store;
+const getState = () => state;
 
 const load = async () => {
   clearInterval(intervalId);
