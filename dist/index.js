@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.66<<');
+console.log('>>langosteria@0.67<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21364,6 +21364,7 @@ const $CALENDAR = '.flatpickr';
 const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
+const $INPUT_TELEPHONE = 'input[nome=telefono]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
@@ -21403,19 +21404,37 @@ const updateState = actions => {
 };
 
 const updateNotes = notes => {
+  currentNoteState = document.querySelector($NOTES_TEXTAREA).value ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value) : {};
   const {
     mode,
     date,
     time
   } = state;
-  const dataString = JSON.stringify({
+  const finalState = { ...currentNoteState,
     mode,
     date,
     time,
     notes
-  });
-  document.querySelector($NOTES_TEXTAREA).value = dataString; // const nextState = { ...state, notes };
-  // state = nextState;
+  };
+  const dataString = JSON.stringify(finalState);
+  document.querySelector($NOTES_TEXTAREA).value = dataString;
+};
+
+const updateTelephone = telephone => {
+  currentNoteState = document.querySelector($NOTES_TEXTAREA).value ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value) : {};
+  const {
+    mode,
+    date,
+    time
+  } = state;
+  const finalState = { ...currentNoteState,
+    mode,
+    date,
+    time,
+    telephone
+  };
+  const dataString = JSON.stringify(finalState);
+  document.querySelector($NOTES_TEXTAREA).value = dataString;
 };
 
 const updateDateButtons = ({
@@ -21640,6 +21659,10 @@ const setupGhostOrderDetails = () => {
   document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
 
   document.querySelector($NOTES_TEXTAREA).onchange = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+
+  document.querySelector($INPUT_TELEPHONE).onkeydown = () => updateTelephone(document.querySelector($INPUT_TELEPHONE).value);
+
+  document.querySelector($INPUT_TELEPHONE).onchange = () => updateTelephone(document.querySelector($INPUT_TELEPHONE).value);
 };
 
 const setupTimeButtons = () => {
