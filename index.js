@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.77');
+console.log('||> langosteria v0.78');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -37,7 +37,7 @@ const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
-const $GHOST_ORDER_DETAILS = '#orderDetails';
+const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
@@ -70,17 +70,22 @@ const updateState = (actions) => {
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
 
-  if (document.querySelector($GHOST_ORDER_DETAILS)) {
-    const { mode, date, time } = state;
-    document.querySelector($GHOST_ORDER_DETAILS).value = JSON.stringify({
-      mode,
-      date,
-      time,
-      notes,
-    });
-  }
+  updateJsonString();
 
   state = nextState;
+};
+
+const updateJsonString = () => {
+  if (!document.querySelector($GHOST_ORDER_DETAILS)) return;
+
+  const { mode, date, time } = state;
+  const notes = document.querySelector('#myNotes').value;
+  const telephone = document.querySelector('#myTelephone').value;
+
+  const finalState = { mode, date, time, notes, telephone };
+  document.querySelector($GHOST_ORDER_DETAILS).value = JSON.stringify(
+    finalState
+  );
 };
 
 const updateDateButtons = ({ availabilities, mode, date }) => {
