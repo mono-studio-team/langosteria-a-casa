@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.73');
+console.log('||> langosteria v0.75');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -69,27 +69,18 @@ const updateState = (actions) => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
+
+  if (document.querySelector($GHOST_ORDER_DETAILS)) {
+    const { mode, date, time } = state;
+    document.querySelector($GHOST_ORDER_DETAILS).value = JSON.stringify({
+      mode,
+      date,
+      time,
+      notes,
+    });
+  }
+
   state = nextState;
-};
-
-const updateNotes = (notes) => {
-  const currentNoteState = document.querySelector($NOTES_TEXTAREA).value
-    ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value)
-    : {};
-  const { mode, date, time } = state;
-  const finalState = { ...currentNoteState, mode, date, time, notes };
-  const dataString = JSON.stringify(finalState);
-  document.querySelector($NOTES_TEXTAREA).value = dataString;
-};
-
-const updateTelephone = (telephone) => {
-  const currentNoteState = document.querySelector($NOTES_TEXTAREA).value
-    ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value)
-    : {};
-  const { mode, date, time } = state;
-  const finalState = { ...currentNoteState, mode, date, time, telephone };
-  const dataString = JSON.stringify(finalState);
-  document.querySelector($NOTES_TEXTAREA).value = dataString;
 };
 
 const updateDateButtons = ({ availabilities, mode, date }) => {
@@ -330,24 +321,42 @@ const setupMaps = (caps) => {
   document.body.appendChild(script);
 };
 
-const setupGhostOrderDetails = () => {
+const setupGhostFields = () => {
   const ghostOrderDetails = document.createElement('textarea');
-  ghostOrderDetails.id = 'orderDetails';
-  ghostOrderDetails.name = 'orderDetails';
+  ghostOrderDetails.id = 'myOrderDetails';
+  ghostOrderDetails.name = 'myOrderDetails';
   document
     .querySelector($NOTES_TEXTAREA)
     .parentElement.appendChild(ghostOrderDetails);
   ghostOrderDetails.style.display = 'none';
 
+  const ghostNotes = document.createElement('textarea');
+  ghostNotes.id = 'myNotes';
+  ghostTghostNoteselephone.name = 'myNotes';
+  document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostNotes);
+  ghostNotes.style.display = 'none';
+
+  const ghostTelephone = document.createElement('textarea');
+  ghostTelephone.id = 'myTelephone';
+  ghostTelephone.name = 'myTelephone';
+  document
+    .querySelector($NOTES_TEXTAREA)
+    .parentElement.appendChild(ghostTelephone);
+  ghostTelephone.style.display = 'none';
+
   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
-    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+    (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
+  // updateNotes('notes', document.querySelector($GHOST_ORDER_DETAILS).value);
   document.querySelector($NOTES_TEXTAREA).onchange = () =>
-    updateNotes(document.querySelector($NOTES_TEXTAREA).value);
+    (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
+  // updateNotes('notes', document.querySelector($GHOST_ORDER_DETAILS).value);
 
   document.querySelector($INPUT_TELEPHONE).onkeydown = () =>
-    updateTelephone(document.querySelector($INPUT_TELEPHONE).value);
+    (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
+  // updateNotes('tel', document.querySelector($INPUT_TELEPHONE).value);
   document.querySelector($INPUT_TELEPHONE).onchange = () =>
-    updateTelephone(document.querySelector($INPUT_TELEPHONE).value);
+    (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
+  // updateNotes('tel', document.querySelector($INPUT_TELEPHONE).value);
 };
 
 const setupTimeButtons = () => {
@@ -486,7 +495,7 @@ const load = async () => {
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
-  setupGhostOrderDetails();
+  setupGhostFields();
 
   setupMaps(caps);
 };
