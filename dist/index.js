@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.69');
+console.log('||> langosteria v0.70');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21537,7 +21537,7 @@ const updateCalendar = ({
     defaultDate: date,
     altInput: true,
     altFormat: 'j/n/Y',
-    altInputClass: 'button options',
+    altInputClass: 'button options display-none',
     onChange: (selectedDates, dateStr) => updateState([{
       type: 'date',
       payload: dateStr

@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.69');
+console.log('||> langosteria v0.70');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -208,7 +208,7 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     defaultDate: date,
     altInput: true,
     altFormat: 'j/n/Y',
-    altInputClass: 'button options',
+    altInputClass: 'button options display-none',
     onChange: (selectedDates, dateStr) =>
       updateState([
         { type: 'date', payload: dateStr },
