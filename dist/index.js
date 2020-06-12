@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.63<<');
+console.log('>>langosteria@0.64<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21367,6 +21367,7 @@ const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
+document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
 let state = {
   pickups: [],
   deliveries: [],
@@ -21683,11 +21684,10 @@ const setupModeRadios = () => {
     radios[0].setAttribute('data-mode', 'delivery');
     radios[1].setAttribute('data-mode', 'pickup');
 
-    if (state.mode) {
-      radios[0].checked = st.mode === 'delivery';
-      radios[1].checked = st.mode === 'pickup';
-      radios[0].setAttribute('checked', st.mode === 'delivery');
-      radios[1].setAttribute('checked', st.mode === 'pickup');
+    if (statestate.mode === 'delivery') {
+      document.querySelector('input[data-mode=delivery]').checked = true;
+    } else {
+      document.querySelector('input[data-mode=pickup]').checked = true;
     } // const currentMode = document.querySelector(
     //   'input[name=shipping-method-choice]:checked'
     // ).dataset.mode;
