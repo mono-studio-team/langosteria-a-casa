@@ -11,7 +11,7 @@ const {
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.61<<');
+console.log('>>langosteria@0.62<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -26,10 +26,11 @@ const condaTableIds = {
 const filterPickups = (i) => i.nome.startsWith('Pickup');
 const filterDeliveries = (i) => i.nome.startsWith('Delivery');
 
+const $SHIPPING_OPTIONS = '#shipping-options';
+const $TIME_SECTION = '#time-section';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
-const $CALENDAR_DIV = '#calendar-div';
 const $CALENDAR = '.flatpickr';
 const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
@@ -81,17 +82,15 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
     (a) => a.dateFlatpickr === date
   );
 
+  console.log('selectedAvailability', selectedAvailability);
+
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
     // update enable/disable
     const availability = availabilities.find(
       (a) => a.dateFlatpickr === el.dataset.date
     );
 
-    // clean
-    el.classList.remove($CLASS_SELECTED);
-    el.classList.remove($CLASS_DISABLED);
-    el.style.pointerEvents = null;
-
+    // enabled/disabled
     let isDisabled;
     if (
       date &&
@@ -100,6 +99,8 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
       !availability.d2Availability
     ) {
       isDisabled = true;
+      el.classList.add($CLASS_DISABLED);
+      el.style.pointerEvents = 'none';
     } else if (
       date &&
       mode === 'pickup' &&
@@ -107,20 +108,54 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
       !availability.p2Availability
     ) {
       isDisabled = true;
+      el.classList.remove($CLASS_DISABLED);
+      el.style.pointerEvents = null;
     }
 
-    if (isDisabled) {
-      el.classList.add($CLASS_DISABLED);
-      el.style.pointerEvents = 'none';
-    }
-
-    // update selected css
+    // selected or not
     if (
       selectedAvailability &&
       el.dataset.date === selectedAvailability.dateFlatpickr
     ) {
       el.classList.add($CLASS_SELECTED);
+    } else {
+      el.classList.remove($CLASS_SELECTED);
     }
+
+    // // clean
+    // el.classList.remove($CLASS_SELECTED);
+    // el.classList.remove($CLASS_DISABLED);
+    // el.style.pointerEvents = null;
+
+    // let isDisabled;
+    // if (
+    //   date &&
+    //   mode === 'delivery' &&
+    //   !availability.d1Availability &&
+    //   !availability.d2Availability
+    // ) {
+    //   isDisabled = true;
+    // } else if (
+    //   date &&
+    //   mode === 'pickup' &&
+    //   !availability.p1Availability &&
+    //   !availability.p2Availability
+    // ) {
+    //   isDisabled = true;
+    // }
+
+    // if (isDisabled) {
+    //   el.classList.add($CLASS_DISABLED);
+    //   el.style.pointerEvents = 'none';
+    // }
+
+    // // update selected css
+    // if (
+    //   selectedAvailability &&
+    //   el.dataset.date === selectedAvailability.dateFlatpickr
+    // ) {
+    //   el.classList.add($CLASS_SELECTED);
+    // }
   });
 };
 
@@ -144,7 +179,6 @@ const updateCalendar = ({ availabilities, mode, date }) => {
 
   const selDate = parse(date, 'yyyy-MM-dd', new Date());
   const difference = differenceInCalendarDays(selDate, new Date());
-  console.log(difference);
 
   if (difference >= 3) {
     document.querySelector($CALENDAR_BTN).classList.add($CLASS_SELECTED);
@@ -176,23 +210,25 @@ const updateTimeButtons = ({
   date,
   time,
 }) => {
+  if (!date) {
+    document.querySelector($TIME_SECTION).style.visibility = 'hidden';
+    return;
+  }
+  document.querySelector($TIME_SECTION).style.visibility = 'visible';
+
   const selectedAvailability = availabilities.find(
     (a) => a.dateFlatpickr === date
   );
 
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
-    // clean
-    el.classList.remove($CLASS_SELECTED);
-    el.classList.remove($CLASS_DISABLED);
-    el.style.pointerEvents = null;
+    // visibility
+    el.style.visibility = date ? 'visible' : 'hidden';
 
-    if (mode === 'delivery') {
-      el.textContent = deliveries[idx].label;
-    } else {
-      el.textContent = pickups[idx].label;
-    }
+    // content
+    el.textContent =
+      mode === 'delivery' ? deliveries[idx].label : pickups[idx].label;
 
-    // update enabled/disabled
+    // enabled/disabled
     let isDisabled;
     if (date && mode === 'delivery') {
       isDisabled =
@@ -205,20 +241,59 @@ const updateTimeButtons = ({
           ? !selectedAvailability.p1Availability
           : !selectedAvailability.p2Availability;
     }
-
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
       el.style.pointerEvents = 'none';
+    } else {
+      el.classList.remove($CLASS_DISABLED);
+      el.style.pointerEvents = null;
     }
 
-    // update selected css
-    if (!time) {
-      el.classList.remove($CLASS_SELECTED);
-    } else if (el.dataset.timeslot === time) {
+    // selected or not
+    if (time === el.dataset.timeslot) {
       el.classList.add($CLASS_SELECTED);
     } else {
       el.classList.remove($CLASS_SELECTED);
     }
+
+    // // clean
+    // el.classList.remove($CLASS_SELECTED);
+    // el.classList.remove($CLASS_DISABLED);
+    // el.style.pointerEvents = null;
+
+    // if (mode === 'delivery') {
+    //   el.textContent = deliveries[idx].label;
+    // } else {
+    //   el.textContent = pickups[idx].label;
+    // }
+
+    // // update enabled/disabled
+    // let isDisabled;
+    // if (date && mode === 'delivery') {
+    //   isDisabled =
+    //     el.dataset.timeslot === '1'
+    //       ? !selectedAvailability.d1Availability
+    //       : !selectedAvailability.d2Availability;
+    // } else if (date && mode === 'pickup') {
+    //   isDisabled =
+    //     el.dataset.timeslot === '2'
+    //       ? !selectedAvailability.p1Availability
+    //       : !selectedAvailability.p2Availability;
+    // }
+
+    // if (isDisabled) {
+    //   el.classList.add($CLASS_DISABLED);
+    //   el.style.pointerEvents = 'none';
+    // }
+
+    // // update selected css
+    // if (!time) {
+    //   el.classList.remove($CLASS_SELECTED);
+    // } else if (el.dataset.timeslot === time) {
+    //   el.classList.add($CLASS_SELECTED);
+    // } else {
+    //   el.classList.remove($CLASS_SELECTED);
+    // }
   });
 };
 
@@ -254,7 +329,7 @@ const setupTimeButtons = () => {
 
 const setupCalendar = () =>
   (document.querySelector($CALENDAR).innerHTML = `
-  <input class="button options" type="text" placeholder="altra data" data-input>
+  <input class="button options" type="text" placeholder="altra data" style="display: none;" data-input>
 
   <a id="calendar-btn" class="button options input-button" title="toggle" data-toggle>...</a>
   `);
@@ -287,31 +362,36 @@ const setupDateButtons = () => {
 
 const setupModeRadios = () => {
   setInterval(
-    (function (updSt) {
-      return function () {
-        const radios = document.querySelectorAll($MODE_RADIO);
-        if (radios[0].dataset.mode) return;
-        radios[0].setAttribute('data-mode', 'delivery');
-        radios[1].setAttribute('data-mode', 'pickup');
+    function (st, updState) {
+      const radios = document.querySelectorAll($MODE_RADIO);
+      if (radios[0].dataset.mode) return;
+      radios[0].setAttribute('data-mode', 'delivery');
+      radios[1].setAttribute('data-mode', 'pickup');
 
-        const currentMode = document.querySelector(
-          'input[name=shipping-method-choice]:checked'
-        ).dataset.mode;
-        updSt([{ type: 'mode', payload: currentMode }]);
+      if (state.mode) {
+        radios[0].checked = st.mode === 'delivery';
+        radios[1].checked = st.mode === 'pickup';
+      }
 
-        radios.forEach(
-          (el) =>
-            (el.onchange = () => {
-              updSt([
-                { type: 'mode', payload: el.dataset.mode },
-                { type: 'date', payload: null },
-                { type: 'time', payload: null },
-              ]);
-            })
-        );
-      };
-    })(updateState),
-    1000
+      // const currentMode = document.querySelector(
+      //   'input[name=shipping-method-choice]:checked'
+      // ).dataset.mode;
+      // updState([{ type: 'mode', payload: currentMode }]);
+
+      radios.forEach(
+        (el) =>
+          (el.onchange = () => {
+            updState([
+              { type: 'mode', payload: el.dataset.mode },
+              { type: 'date', payload: null },
+              { type: 'time', payload: null },
+            ]);
+          })
+      );
+    },
+    1000,
+    state,
+    updateState
   );
 };
 
@@ -359,6 +439,7 @@ const load = async () => {
   // console.log('next3Days', next3Days);
   //|-> end of GET DATA FROM CODA
 
+  document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
