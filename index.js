@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.79');
+console.log('||> langosteria v0.80');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -24,8 +24,8 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
 
-const filterPickups = (i) => i.nome.startsWith('Pickup');
-const filterDeliveries = (i) => i.nome.startsWith('Delivery');
+const filterPickups = (i) => i.id.startsWith('P');
+const filterDeliveries = (i) => i.id.startsWith('D');
 
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $TIME_SECTION = '#time-section';
