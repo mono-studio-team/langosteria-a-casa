@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.68');
+console.log('||> langosteria v0.69');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21364,7 +21364,7 @@ const $CALENDAR = '.flatpickr';
 const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
-const $INPUT_TELEPHONE = 'input[nome=telefono]';
+const $INPUT_TELEPHONE = 'input[name=telefono]';
 const $GHOST_ORDER_DETAILS = '#orderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
