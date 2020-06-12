@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.65<<');
+console.log('>>langosteria@0.66<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21678,11 +21678,12 @@ const setupDateButtons = () => {
 };
 
 const setupModeRadios = () => {
-  setInterval(function (st, updState) {
+  setInterval(function (getStore, updState) {
     const radios = document.querySelectorAll($MODE_RADIO);
     if (radios[0].dataset.mode) return;
     radios[0].setAttribute('data-mode', 'delivery');
     radios[1].setAttribute('data-mode', 'pickup');
+    const st = getStore();
 
     if (st.mode === 'delivery') {
       document.querySelector('input[data-mode=delivery]').checked = true;
@@ -21706,8 +21707,10 @@ const setupModeRadios = () => {
         payload: null
       }]);
     });
-  }, 1000, state, updateState);
+  }, 1000, getStore, updateState);
 };
+
+const getStore = () => store;
 
 const load = async () => {
   clearInterval(intervalId);
