@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.75');
+console.log('||> langosteria v0.76');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -98,15 +98,15 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     // enabled/disabled
     let isDisabled;
-    if (
+    if (!date) {
+      isDisabled = true;
+    } else if (
       date &&
       mode === 'delivery' &&
       !availability.d1Availability &&
       !availability.d2Availability
     ) {
       isDisabled = true;
-      el.classList.add($CLASS_DISABLED);
-      el.style.pointerEvents = 'none';
     } else if (
       date &&
       mode === 'pickup' &&
@@ -114,6 +114,12 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
       !availability.p2Availability
     ) {
       isDisabled = true;
+    }
+
+    if (isDisabled) {
+      el.classList.add($CLASS_DISABLED);
+      el.style.pointerEvents = 'none';
+    } else {
       el.classList.remove($CLASS_DISABLED);
       el.style.pointerEvents = null;
     }
@@ -127,41 +133,6 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
     } else {
       el.classList.remove($CLASS_SELECTED);
     }
-
-    // // clean
-    // el.classList.remove($CLASS_SELECTED);
-    // el.classList.remove($CLASS_DISABLED);
-    // el.style.pointerEvents = null;
-
-    // let isDisabled;
-    // if (
-    //   date &&
-    //   mode === 'delivery' &&
-    //   !availability.d1Availability &&
-    //   !availability.d2Availability
-    // ) {
-    //   isDisabled = true;
-    // } else if (
-    //   date &&
-    //   mode === 'pickup' &&
-    //   !availability.p1Availability &&
-    //   !availability.p2Availability
-    // ) {
-    //   isDisabled = true;
-    // }
-
-    // if (isDisabled) {
-    //   el.classList.add($CLASS_DISABLED);
-    //   el.style.pointerEvents = 'none';
-    // }
-
-    // // update selected css
-    // if (
-    //   selectedAvailability &&
-    //   el.dataset.date === selectedAvailability.dateFlatpickr
-    // ) {
-    //   el.classList.add($CLASS_SELECTED);
-    // }
   });
 };
 
@@ -263,45 +234,6 @@ const updateTimeButtons = ({
     } else {
       el.classList.remove($CLASS_SELECTED);
     }
-
-    // // clean
-    // el.classList.remove($CLASS_SELECTED);
-    // el.classList.remove($CLASS_DISABLED);
-    // el.style.pointerEvents = null;
-
-    // if (mode === 'delivery') {
-    //   el.textContent = deliveries[idx].label;
-    // } else {
-    //   el.textContent = pickups[idx].label;
-    // }
-
-    // // update enabled/disabled
-    // let isDisabled;
-    // if (date && mode === 'delivery') {
-    //   isDisabled =
-    //     el.dataset.timeslot === '1'
-    //       ? !selectedAvailability.d1Availability
-    //       : !selectedAvailability.d2Availability;
-    // } else if (date && mode === 'pickup') {
-    //   isDisabled =
-    //     el.dataset.timeslot === '2'
-    //       ? !selectedAvailability.p1Availability
-    //       : !selectedAvailability.p2Availability;
-    // }
-
-    // if (isDisabled) {
-    //   el.classList.add($CLASS_DISABLED);
-    //   el.style.pointerEvents = 'none';
-    // }
-
-    // // update selected css
-    // if (!time) {
-    //   el.classList.remove($CLASS_SELECTED);
-    // } else if (el.dataset.timeslot === time) {
-    //   el.classList.add($CLASS_SELECTED);
-    // } else {
-    //   el.classList.remove($CLASS_SELECTED);
-    // }
   });
 };
 
