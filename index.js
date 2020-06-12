@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('>>langosteria@0.64<<');
+console.log('>>langosteria@0.65<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -382,7 +382,7 @@ const setupModeRadios = () => {
       radios[0].setAttribute('data-mode', 'delivery');
       radios[1].setAttribute('data-mode', 'pickup');
 
-      if (statestate.mode === 'delivery') {
+      if (st.mode === 'delivery') {
         document.querySelector('input[data-mode=delivery]').checked = true;
       } else {
         document.querySelector('input[data-mode=pickup]').checked = true;
