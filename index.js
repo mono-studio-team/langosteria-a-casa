@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.70');
+console.log('||> langosteria v0.71');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -73,7 +73,7 @@ const updateState = (actions) => {
 };
 
 const updateNotes = (notes) => {
-  currentNoteState = document.querySelector($NOTES_TEXTAREA).value
+  const currentNoteState = document.querySelector($NOTES_TEXTAREA).value
     ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value)
     : {};
   const { mode, date, time } = state;
@@ -83,7 +83,7 @@ const updateNotes = (notes) => {
 };
 
 const updateTelephone = (telephone) => {
-  currentNoteState = document.querySelector($NOTES_TEXTAREA).value
+  const currentNoteState = document.querySelector($NOTES_TEXTAREA).value
     ? JSON.parse(document.querySelector($NOTES_TEXTAREA).value)
     : {};
   const { mode, date, time } = state;
