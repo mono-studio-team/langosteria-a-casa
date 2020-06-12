@@ -21062,6 +21062,144 @@ var _default = locale;
 exports.default = _default;
 },{"./_lib/formatDistance/index.js":"UUhY","./_lib/formatLong/index.js":"WjLJ","./_lib/formatRelative/index.js":"tcLp","./_lib/localize/index.js":"BW2Q","./_lib/match/index.js":"XGZV"}],"LEYW":[function(require,module,exports) {
 
+},{}],"VPF2":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+// elenco dei cap ammessi
+// var caps = [
+//   '20121',
+//   '20122',
+//   '20123',
+//   '20124',
+//   '20129',
+//   '20135',
+//   '20136',
+//   '20144',
+//   '20145',
+//   '20146',
+//   '20149',
+//   '20151',
+//   '20154',
+//   '20159',
+// ];
+var _default = caps => {
+  var placeSearch, autocomplete;
+  var componentForm = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_2: 'short_name',
+    country: 'short_name',
+    postal_code: 'short_name'
+  };
+
+  window.initAutocomplete = function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('route_street_number'), {
+      types: ['geocode']
+    });
+    autocomplete.setFields(['address_component']);
+    autocomplete.addListener('place_changed', () => fillInAddress(caps));
+    autocomplete.setComponentRestrictions({
+      country: 'it'
+    }); // con questo evento ascoltiamo le immissioni manuali nell' input
+    // ed anche l'auto-fill del browser
+
+    document.querySelector('[data-address="postal_code"]').addEventListener('input', function () {
+      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+    document.querySelector('[data-address="postal_code"]').addEventListener('keydown', function () {
+      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+    document.querySelector('[data-address="postal_code"]').addEventListener('blur', function () {
+      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+  }; // controllo del cap corrente
+
+
+  function checkCoverage(caps, postal_code) {
+    // se in lista o minore di 5 caratteri o campo vuoto -> non mostra errore
+    // altrimenti -> mostra errore
+    if (caps.includes(postal_code) || postal_code.length < 5 || !postal_code.length) {
+      // document.querySelector('#area-check-pass').style.display = 'block';
+      document.querySelector('#area-check-error').style.display = 'none';
+      document.querySelector('#btn-checkout').style.display = 'block';
+    } else {
+      // document.querySelector('#area-check-pass').style.display = 'none';
+      document.querySelector('#area-check-error').style.display = 'block';
+      document.querySelector('#btn-checkout').style.display = 'none';
+    }
+  }
+
+  function fillInAddress(caps) {
+    var place = autocomplete.getPlace();
+    let route;
+    let street_number;
+
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+
+        switch (addressType) {
+          case 'route':
+            route = val;
+            break;
+
+          case 'street_number':
+            street_number = val;
+            break;
+
+          case 'country':
+            document.querySelector('[data-address="country"]').value = val;
+            break;
+
+          default:
+            document.querySelector(`[data-address='${addressType}']`).value = val;
+        }
+
+        if (addressType === 'postal_code') {
+          checkCoverage(val);
+        }
+      }
+    } // se il numero civico e' presente
+    // concatena via e numero civico nello stesso input
+
+
+    const route_street_number = street_number ? `${route}, ${street_number}` : route;
+
+    if (route_street_number) {
+      document.querySelector(`[data-address='route_street_number']`).value = route_street_number;
+    }
+  }
+
+  function geolocate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+  }
+};
+/* <script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete"></script>; */
+
+
+exports.default = _default;
 },{}],"PTZA":[function(require,module,exports) {
 var bundleURL = null;
 
@@ -21184,6 +21322,8 @@ var _flatpickr = _interopRequireDefault(require("flatpickr"));
 
 var _it = require("flatpickr/dist/l10n/it.js");
 
+var _useMaps = _interopRequireDefault(require("./useMaps"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const {
@@ -21201,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.62<<');
+console.log('>>langosteria@0.63<<');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21477,6 +21617,18 @@ const updateCheckoutButton = ({
   document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
 };
 
+const setupMaps = caps => {
+  (0, _useMaps.default)(caps);
+  const script = document.createElement('script');
+
+  script.onload = function () {
+    console.log('maps loaded');
+  };
+
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete';
+  document.body.appendChild(script);
+};
+
 const setupGhostOrderDetails = () => {
   const ghostOrderDetails = document.createElement('textarea');
   ghostOrderDetails.id = 'orderDetails';
@@ -21534,6 +21686,8 @@ const setupModeRadios = () => {
     if (state.mode) {
       radios[0].checked = st.mode === 'delivery';
       radios[1].checked = st.mode === 'pickup';
+      radios[0].setAttribute('checked', st.mode === 'delivery');
+      radios[1].setAttribute('checked', st.mode === 'pickup');
     } // const currentMode = document.querySelector(
     //   'input[name=shipping-method-choice]:checked'
     // ).dataset.mode;
@@ -21569,6 +21723,11 @@ const load = async () => {
     getViewData
   } = coda(axiosInstance); // GET DATA FROM CODA
 
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps
+  });
+  const caps = capsObj.map(i => i['cAP']);
   const servicesObj = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsServices
@@ -21604,6 +21763,7 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostOrderDetails();
+  setupMaps(caps);
 };
 
 intervalId = setInterval(function () {
@@ -21614,7 +21774,7 @@ intervalId = setInterval(function () {
     load();
   }
 }, 1000);
-},{"flatpickr":"rx2B","flatpickr/dist/l10n/it.js":"wksl","date-fns":"IY9X","date-fns/locale/it":"ZO3b","flatpickr/dist/themes/airbnb.css":"LEYW","_bundle_loader":"Fzvl","./useAxios":[["useAxios.a4fcc095.js","KB3V"],"useAxios.a4fcc095.js.map","KB3V"],"./useCoda":[["useCoda.023e10c7.js","Negm"],"useCoda.023e10c7.js.map","Negm"]}],"pIj2":[function(require,module,exports) {
+},{"flatpickr":"rx2B","flatpickr/dist/l10n/it.js":"wksl","date-fns":"IY9X","date-fns/locale/it":"ZO3b","flatpickr/dist/themes/airbnb.css":"LEYW","./useMaps":"VPF2","_bundle_loader":"Fzvl","./useAxios":[["useAxios.a4fcc095.js","KB3V"],"useAxios.a4fcc095.js.map","KB3V"],"./useCoda":[["useCoda.023e10c7.js","Negm"],"useCoda.023e10c7.js.map","Negm"]}],"pIj2":[function(require,module,exports) {
 module.exports = function loadJSBundle(bundle) {
   return new Promise(function (resolve, reject) {
     var script = document.createElement('script');

@@ -10,8 +10,9 @@ const {
 } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
+import useMaps from './useMaps';
 
-console.log('>>langosteria@0.62<<');
+console.log('>>langosteria@0.63<<');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -302,6 +303,17 @@ const updateCheckoutButton = ({ mode, date, time }) => {
   document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
 };
 
+const setupMaps = (caps) => {
+  useMaps(caps);
+  const script = document.createElement('script');
+  script.onload = function () {
+    console.log('maps loaded');
+  };
+  script.src =
+    'https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete';
+  document.body.appendChild(script);
+};
+
 const setupGhostOrderDetails = () => {
   const ghostOrderDetails = document.createElement('textarea');
   ghostOrderDetails.id = 'orderDetails';
@@ -371,6 +383,8 @@ const setupModeRadios = () => {
       if (state.mode) {
         radios[0].checked = st.mode === 'delivery';
         radios[1].checked = st.mode === 'pickup';
+        radios[0].setAttribute('checked', st.mode === 'delivery');
+        radios[1].setAttribute('checked', st.mode === 'pickup');
       }
 
       // const currentMode = document.querySelector(
@@ -404,6 +418,12 @@ const load = async () => {
   const { getTableData, getViewData } = coda(axiosInstance);
 
   // GET DATA FROM CODA
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps,
+  });
+  const caps = capsObj.map((i) => i['cAP']);
+
   const servicesObj = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsServices,
@@ -444,6 +464,8 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostOrderDetails();
+
+  setupMaps(caps);
 };
 
 intervalId = setInterval(function () {
