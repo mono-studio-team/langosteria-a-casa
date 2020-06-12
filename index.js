@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.78');
+console.log('||> langosteria v0.79');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -123,6 +123,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
+      el.classList.remove($CLASS_SELECTED);
       el.style.pointerEvents = 'none';
     } else {
       el.classList.remove($CLASS_DISABLED);
@@ -192,12 +193,6 @@ const updateTimeButtons = ({
   date,
   time,
 }) => {
-  if (!date) {
-    document.querySelector($TIME_SECTION).style.visibility = 'hidden';
-    return;
-  }
-  document.querySelector($TIME_SECTION).style.visibility = 'visible';
-
   const selectedAvailability = availabilities.find(
     (a) => a.dateFlatpickr === date
   );
@@ -227,6 +222,7 @@ const updateTimeButtons = ({
     }
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
+      el.classList.remove($CLASS_SELECTED);
       el.style.pointerEvents = 'none';
     } else {
       el.classList.remove($CLASS_DISABLED);

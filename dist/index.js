@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.78');
+console.log('||> langosteria v0.79');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21446,6 +21446,7 @@ const updateDateButtons = ({
 
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
+      el.classList.remove($CLASS_SELECTED);
       el.style.pointerEvents = 'none';
     } else {
       el.classList.remove($CLASS_DISABLED);
@@ -21517,12 +21518,6 @@ const updateTimeButtons = ({
   date,
   time
 }) => {
-  if (!date) {
-    document.querySelector($TIME_SECTION).style.visibility = 'hidden';
-    return;
-  }
-
-  document.querySelector($TIME_SECTION).style.visibility = 'visible';
   const selectedAvailability = availabilities.find(a => a.dateFlatpickr === date);
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
     // visibility
@@ -21542,6 +21537,7 @@ const updateTimeButtons = ({
 
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
+      el.classList.remove($CLASS_SELECTED);
       el.style.pointerEvents = 'none';
     } else {
       el.classList.remove($CLASS_DISABLED);
