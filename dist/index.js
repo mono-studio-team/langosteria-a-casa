@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.72');
+console.log('||> langosteria v0.73');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21658,9 +21658,9 @@ const setupGhostOrderDetails = () => {
   document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostOrderDetails);
   ghostOrderDetails.style.display = 'none';
 
-  document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+  document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($NOTES_TEXTAREA).value);
 
-  document.querySelector($NOTES_TEXTAREA).onchange = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+  document.querySelector($NOTES_TEXTAREA).onchange = () => updateNotes(document.querySelector($NOTES_TEXTAREA).value);
 
   document.querySelector($INPUT_TELEPHONE).onkeydown = () => updateTelephone(document.querySelector($INPUT_TELEPHONE).value);
 
