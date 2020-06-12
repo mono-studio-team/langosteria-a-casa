@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.76');
+console.log('||> langosteria v0.77');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21581,7 +21581,7 @@ const setupGhostFields = () => {
   ghostOrderDetails.style.display = 'none';
   const ghostNotes = document.createElement('textarea');
   ghostNotes.id = 'myNotes';
-  ghostTghostNoteselephone.name = 'myNotes';
+  ghostNotes.name = 'myNotes';
   document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostNotes);
   ghostNotes.style.display = 'none';
   const ghostTelephone = document.createElement('textarea');

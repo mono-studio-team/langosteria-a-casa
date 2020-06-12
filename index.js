@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.76');
+console.log('||> langosteria v0.77');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -264,7 +264,7 @@ const setupGhostFields = () => {
 
   const ghostNotes = document.createElement('textarea');
   ghostNotes.id = 'myNotes';
-  ghostTghostNoteselephone.name = 'myNotes';
+  ghostNotes.name = 'myNotes';
   document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostNotes);
   ghostNotes.style.display = 'none';
 
