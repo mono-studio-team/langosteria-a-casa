@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('>>langosteria@0.67<<');
+console.log('||> langosteria v0.68');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21574,7 +21574,7 @@ const updateTimeButtons = ({
     if (date && mode === 'delivery') {
       isDisabled = el.dataset.timeslot === '1' ? !selectedAvailability.d1Availability : !selectedAvailability.d2Availability;
     } else if (date && mode === 'pickup') {
-      isDisabled = el.dataset.timeslot === '2' ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
+      isDisabled = el.dataset.timeslot === '1' ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
     }
 
     if (isDisabled) {
