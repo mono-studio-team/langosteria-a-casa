@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.80');
+console.log('||> langosteria v0.81');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -41,7 +41,7 @@ const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
-document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
+// document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
 
 let state = {
   pickups: [],
@@ -199,7 +199,7 @@ const updateTimeButtons = ({
 
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
     // visibility
-    el.style.visibility = date ? 'visible' : 'hidden';
+    // el.style.visibility = date ? 'visible' : 'hidden';
 
     // content
     el.textContent =

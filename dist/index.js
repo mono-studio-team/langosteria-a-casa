@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.80');
+console.log('||> langosteria v0.81');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21367,8 +21367,8 @@ const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
 const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
-const $CLASS_DISABLED = 'disabled';
-document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
+const $CLASS_DISABLED = 'disabled'; // document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
+
 let state = {
   pickups: [],
   deliveries: [],
@@ -21521,8 +21521,8 @@ const updateTimeButtons = ({
   const selectedAvailability = availabilities.find(a => a.dateFlatpickr === date);
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
     // visibility
-    el.style.visibility = date ? 'visible' : 'hidden'; // content
-
+    // el.style.visibility = date ? 'visible' : 'hidden';
+    // content
     el.textContent = mode === 'delivery' ? deliveries[idx].label : pickups[idx].label; // enabled/disabled
 
     let isDisabled;
