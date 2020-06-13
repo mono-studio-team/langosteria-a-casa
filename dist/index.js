@@ -21164,7 +21164,7 @@ var _default = (caps, onCheckShippingCoverage) => {
         }
 
         if (addressType === 'postal_code') {
-          checkShippingCoverage(val);
+          checkShippingCoverage(caps, val);
         }
       }
     } // se il numero civico e' presente
@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.83');
+console.log('||> langosteria v0.84');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {

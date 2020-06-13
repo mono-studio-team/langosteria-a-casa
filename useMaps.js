@@ -111,7 +111,7 @@ export default (caps, onCheckShippingCoverage) => {
             ).value = val;
         }
         if (addressType === 'postal_code') {
-          checkShippingCoverage(val);
+          checkShippingCoverage(caps, val);
         }
       }
     }
