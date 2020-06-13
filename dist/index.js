@@ -21355,7 +21355,7 @@ const filterPickups = i => i.iD.startsWith('P');
 
 const filterDeliveries = i => i.iD.startsWith('D');
 
-const $SHIPPING_LOADER = '$shipping-loader';
+const $SHIPPING_LOADER = '#shipping-loader';
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $TIME_SECTION = '#time-section';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
