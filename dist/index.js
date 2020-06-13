@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.86');
+console.log('||> langosteria v0.87');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21401,17 +21401,16 @@ const updateState = actions => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
-  updateJsonString();
+  updateJsonString(nextState);
   state = nextState;
 };
 
-const updateJsonString = () => {
+const updateJsonString = ({
+  mode,
+  date,
+  time
+}) => {
   if (!document.querySelector($GHOST_ORDER_DETAILS)) return;
-  const {
-    mode,
-    date,
-    time
-  } = state;
   const notes = document.querySelector('#myNotes').value;
   const telephone = document.querySelector('#myTelephone').value;
   const finalState = {
