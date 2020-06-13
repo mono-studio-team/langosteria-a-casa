@@ -16,7 +16,7 @@
 //   '20159',
 // ];
 
-export default (caps) => {
+export default (caps, onCheckCoverage) => {
   var placeSearch, autocomplete;
 
   var componentForm = {
@@ -42,7 +42,7 @@ export default (caps) => {
     document
       .querySelector('[data-address="postal_code"]')
       .addEventListener('input', function () {
-        checkCoverage(
+        checkShippingCoverage(
           caps,
           document.querySelector('[data-address="postal_code"]').value
         );
@@ -50,7 +50,7 @@ export default (caps) => {
     document
       .querySelector('[data-address="postal_code"]')
       .addEventListener('keydown', function () {
-        checkCoverage(
+        checkShippingCoverage(
           caps,
           document.querySelector('[data-address="postal_code"]').value
         );
@@ -58,7 +58,7 @@ export default (caps) => {
     document
       .querySelector('[data-address="postal_code"]')
       .addEventListener('blur', function () {
-        checkCoverage(
+        checkShippingCoverage(
           caps,
           document.querySelector('[data-address="postal_code"]').value
         );
@@ -66,7 +66,7 @@ export default (caps) => {
   };
 
   // controllo del cap corrente
-  function checkCoverage(caps, postal_code) {
+  function checkShippingCoverage(caps, postal_code) {
     // se in lista o minore di 5 caratteri o campo vuoto -> non mostra errore
     // altrimenti -> mostra errore
     if (
@@ -74,13 +74,15 @@ export default (caps) => {
       postal_code.length < 5 ||
       !postal_code.length
     ) {
+      onCheckShippingCoverage(true);
       // document.querySelector('#area-check-pass').style.display = 'block';
       document.querySelector('#area-check-error').style.display = 'none';
-      document.querySelector('#btn-checkout').style.display = 'block';
+      // document.querySelector('#btn-checkout').style.display = 'block';
     } else {
+      onCheckShippingCoverage(false);
       // document.querySelector('#area-check-pass').style.display = 'none';
       document.querySelector('#area-check-error').style.display = 'block';
-      document.querySelector('#btn-checkout').style.display = 'none';
+      // document.querySelector('#btn-checkout').style.display = 'none';
     }
   }
 
@@ -109,7 +111,7 @@ export default (caps) => {
             ).value = val;
         }
         if (addressType === 'postal_code') {
-          checkCoverage(val);
+          checkShippingCoverage(val);
         }
       }
     }

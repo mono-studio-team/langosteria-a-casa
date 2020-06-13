@@ -21087,7 +21087,7 @@ exports.default = void 0;
 //   '20154',
 //   '20159',
 // ];
-var _default = caps => {
+var _default = (caps, onCheckCoverage) => {
   var placeSearch, autocomplete;
   var componentForm = {
     street_number: 'short_name',
@@ -21110,28 +21110,28 @@ var _default = caps => {
     // ed anche l'auto-fill del browser
 
     document.querySelector('[data-address="postal_code"]').addEventListener('input', function () {
-      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
     });
     document.querySelector('[data-address="postal_code"]').addEventListener('keydown', function () {
-      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
     });
     document.querySelector('[data-address="postal_code"]').addEventListener('blur', function () {
-      checkCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
     });
   }; // controllo del cap corrente
 
 
-  function checkCoverage(caps, postal_code) {
+  function checkShippingCoverage(caps, postal_code) {
     // se in lista o minore di 5 caratteri o campo vuoto -> non mostra errore
     // altrimenti -> mostra errore
     if (caps.includes(postal_code) || postal_code.length < 5 || !postal_code.length) {
-      // document.querySelector('#area-check-pass').style.display = 'block';
-      document.querySelector('#area-check-error').style.display = 'none';
-      document.querySelector('#btn-checkout').style.display = 'block';
+      onCheckShippingCoverage(true); // document.querySelector('#area-check-pass').style.display = 'block';
+
+      document.querySelector('#area-check-error').style.display = 'none'; // document.querySelector('#btn-checkout').style.display = 'block';
     } else {
-      // document.querySelector('#area-check-pass').style.display = 'none';
-      document.querySelector('#area-check-error').style.display = 'block';
-      document.querySelector('#btn-checkout').style.display = 'none';
+      onCheckShippingCoverage(false); // document.querySelector('#area-check-pass').style.display = 'none';
+
+      document.querySelector('#area-check-error').style.display = 'block'; // document.querySelector('#btn-checkout').style.display = 'none';
     }
   }
 
@@ -21164,7 +21164,7 @@ var _default = caps => {
         }
 
         if (addressType === 'postal_code') {
-          checkCoverage(val);
+          checkShippingCoverage(val);
         }
       }
     } // se il numero civico e' presente
@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.81');
+console.log('||> langosteria v0.82');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21351,9 +21351,9 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb'
 };
 
-const filterPickups = i => i.id.startsWith('P');
+const filterPickups = i => i.iD.startsWith('P');
 
-const filterDeliveries = i => i.id.startsWith('D');
+const filterDeliveries = i => i.iD.startsWith('D');
 
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $TIME_SECTION = '#time-section';
@@ -21367,8 +21367,8 @@ const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
 const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
-const $CLASS_DISABLED = 'disabled'; // document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
-
+const $CLASS_DISABLED = 'disabled';
+document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
 let state = {
   pickups: [],
   deliveries: [],
@@ -21563,7 +21563,16 @@ const updateCheckoutButton = ({
 };
 
 const setupMaps = caps => {
-  (0, _useMaps.default)(caps);
+  (0, _useMaps.default)(caps, canShip => {
+    document.querySelector('input[data-mode=delivery]').disabled = !canShip;
+
+    if (!canShip) {
+      updateState([{
+        type: 'mode',
+        payload: 'pickup'
+      }]);
+    }
+  });
   const script = document.createElement('script');
 
   script.onload = function () {

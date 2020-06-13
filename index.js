@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.81');
+console.log('||> langosteria v0.82');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -24,8 +24,8 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
 
-const filterPickups = (i) => i.id.startsWith('P');
-const filterDeliveries = (i) => i.id.startsWith('D');
+const filterPickups = (i) => i.iD.startsWith('P');
+const filterDeliveries = (i) => i.iD.startsWith('D');
 
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $TIME_SECTION = '#time-section';
@@ -41,7 +41,7 @@ const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
-// document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
+document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
 
 let state = {
   pickups: [],
@@ -244,7 +244,13 @@ const updateCheckoutButton = ({ mode, date, time }) => {
 };
 
 const setupMaps = (caps) => {
-  useMaps(caps);
+  useMaps(caps, (canShip) => {
+    document.querySelector('input[data-mode=delivery]').disabled = !canShip;
+    if (!canShip) {
+      updateState([{ type: 'mode', payload: 'pickup' }]);
+    }
+  });
+
   const script = document.createElement('script');
   script.onload = function () {
     console.log('maps loaded');
