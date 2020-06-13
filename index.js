@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.92');
+console.log('||> langosteria v0.93');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -42,7 +42,7 @@ const $GHOST_ORDER_DETAILS = '#myOrderDetails';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
-document.querySelector($SHIPPING_OPTIONS).style.visibility = 'hidden';
+document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
 
 let state = {
   pickups: [],
@@ -175,7 +175,7 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     enable,
     defaultDate: date,
     altInput: true,
-    altFormat: 'j/n/Y',
+    altFormat: 'l j',
     altInputClass: 'button options display-none',
     onChange: (selectedDates, dateStr) =>
       updateState([
@@ -239,8 +239,11 @@ const updateTimeButtons = ({
 };
 
 const updateCheckoutButton = ({ mode, date, time }) => {
-  const visibility = mode && date && time ? 'visible' : 'hidden';
-  document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
+  if (mode && date && time) {
+    document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
+  } else {
+    document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
+  }
 };
 
 const setupMaps = async () => {
@@ -337,9 +340,9 @@ const setupDateButtons = () => {
     el.setAttribute('data-date', attributeValue);
 
     // set label text
-    el.textContent = format(btnDate, 'EEEE d', {
-      locale: itLocalize,
-    });
+    // el.textContent = format(btnDate, 'EEEE d', {
+    //   locale: itLocalize,
+    // });
 
     el.onclick = () =>
       updateState([
@@ -442,7 +445,7 @@ const load = async () => {
   ]);
 
   document.querySelector($SHIPPING_LOADER).style.display = 'none';
-  document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
+  document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
