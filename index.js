@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.85');
+console.log('||> langosteria v0.86');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -27,6 +27,7 @@ const condaTableIds = {
 const filterPickups = (i) => i.iD.startsWith('P');
 const filterDeliveries = (i) => i.iD.startsWith('D');
 
+const $SHIPPING_LOADER = '$shipping-loader';
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $TIME_SECTION = '#time-section';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
@@ -103,9 +104,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
 
     // enabled/disabled
     let isDisabled;
-    if (!date) {
-      isDisabled = true;
-    } else if (
+    if (
       date &&
       mode === 'delivery' &&
       !availability.d1Availability &&
@@ -441,6 +440,7 @@ const load = async () => {
   // console.log('next3Days', next3Days);
   //|-> end of GET DATA FROM CODA
 
+  document.querySelector($SHIPPING_LOADER).style.display = 'none';
   document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
   setupModeRadios();
   setupDateButtons();
