@@ -21087,7 +21087,7 @@ exports.default = void 0;
 //   '20154',
 //   '20159',
 // ];
-var _default = (caps, onCheckCoverage) => {
+var _default = (caps, onCheckShippingCoverage) => {
   var placeSearch, autocomplete;
   var componentForm = {
     street_number: 'short_name',
@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.82');
+console.log('||> langosteria v0.83');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {

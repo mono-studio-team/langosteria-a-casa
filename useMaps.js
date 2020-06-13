@@ -16,7 +16,7 @@
 //   '20159',
 // ];
 
-export default (caps, onCheckCoverage) => {
+export default (caps, onCheckShippingCoverage) => {
   var placeSearch, autocomplete;
 
   var componentForm = {
