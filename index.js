@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.84');
+console.log('||> langosteria v0.85');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -243,7 +243,18 @@ const updateCheckoutButton = ({ mode, date, time }) => {
   document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
 };
 
-const setupMaps = (caps) => {
+const setupMaps = async () => {
+  const { axiosInstance } = await import('./useAxios');
+  const { coda } = await import('./useCoda');
+  const { getTableData } = coda(axiosInstance);
+
+  // GET DATA FROM CODA
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps,
+  });
+  const caps = capsObj.map((i) => i['cAP']);
+
   useMaps(caps, (canShip) => {
     document.querySelector('input[data-mode=delivery]').disabled = !canShip;
     if (!canShip) {
@@ -389,11 +400,11 @@ const load = async () => {
   const { getTableData, getViewData } = coda(axiosInstance);
 
   // GET DATA FROM CODA
-  const capsObj = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsCaps,
-  });
-  const caps = capsObj.map((i) => i['cAP']);
+  // const capsObj = await getTableData({
+  //   docId: condaDocId,
+  //   tableIdOrName: condaTableIds.settingsCaps,
+  // });
+  // const caps = capsObj.map((i) => i['cAP']);
 
   const servicesObj = await getTableData({
     docId: condaDocId,
@@ -435,9 +446,9 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
-
-  setupMaps(caps);
 };
+
+setupMaps();
 
 intervalId = setInterval(function () {
   console.log('search for radios...');
