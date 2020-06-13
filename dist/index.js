@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.91');
+console.log('||> langosteria v0.92');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21434,30 +21434,33 @@ const updateDateButtons = ({
   console.log('selectedAvailability', selectedAvailability);
   document.querySelectorAll($DATE_BUTTONS).forEach(el => {
     // update enable/disable
-    const availability = availabilities.find(a => a.dateFlatpickr === el.dataset.date); // enabled/disabled
+    const availability = availabilities.find(a => a.dateFlatpickr === el.dataset.date);
 
-    let isDisabled;
+    if (availability) {
+      // enabled/disabled
+      let isDisabled;
 
-    if (mode === 'delivery' && !availability.d1Availability && !availability.d2Availability) {
-      isDisabled = true;
-    } else if (mode === 'pickup' && !availability.p1Availability && !availability.p2Availability) {
-      isDisabled = true;
-    }
+      if (mode === 'delivery' && !availability.d1Availability && !availability.d2Availability) {
+        isDisabled = true;
+      } else if (mode === 'pickup' && !availability.p1Availability && !availability.p2Availability) {
+        isDisabled = true;
+      }
 
-    if (isDisabled) {
-      el.classList.add($CLASS_DISABLED);
-      el.classList.remove($CLASS_SELECTED);
-      el.style.pointerEvents = 'none';
-    } else {
-      el.classList.remove($CLASS_DISABLED);
-      el.style.pointerEvents = null;
-    } // selected or not
+      if (isDisabled) {
+        el.classList.add($CLASS_DISABLED);
+        el.classList.remove($CLASS_SELECTED);
+        el.style.pointerEvents = 'none';
+      } else {
+        el.classList.remove($CLASS_DISABLED);
+        el.style.pointerEvents = null;
+      } // selected or not
 
 
-    if (selectedAvailability && el.dataset.date === selectedAvailability.dateFlatpickr) {
-      el.classList.add($CLASS_SELECTED);
-    } else {
-      el.classList.remove($CLASS_SELECTED);
+      if (selectedAvailability && el.dataset.date === selectedAvailability.dateFlatpickr) {
+        el.classList.add($CLASS_SELECTED);
+      } else {
+        el.classList.remove($CLASS_SELECTED);
+      }
     }
   });
 };
