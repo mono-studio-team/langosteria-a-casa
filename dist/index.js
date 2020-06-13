@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.87');
+console.log('||> langosteria v0.88');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21381,16 +21381,20 @@ let state = {
 };
 
 const updateState = actions => {
-  let nextState;
-  actions.forEach(({
-    type,
-    payload
-  }) => {
-    nextState = { ...state,
-      ...nextState,
-      [type]: payload
-    };
-  });
+  let nextState = { ...state
+  };
+
+  if (actions.type !== 'sync') {
+    actions.forEach(({
+      type,
+      payload
+    }) => {
+      nextState = { ...nextState,
+        [type]: payload
+      };
+    });
+  }
+
   const statelog = {
     mode: nextState.mode,
     date: nextState.date,
@@ -21651,14 +21655,22 @@ const setupDateButtons = () => {
     el.textContent = format(btnDate, 'EEEE d', {
       locale: itLocalize
     });
-  });
-  document.querySelectorAll($DATE_BUTTONS).forEach(el => el.onclick = () => updateState([{
-    type: 'date',
-    payload: el.dataset.date
-  }, {
-    type: 'time',
-    payload: null
-  }]));
+
+    el.onclick = () => updateState([{
+      type: 'date',
+      payload: el.dataset.date
+    }, {
+      type: 'time',
+      payload: null
+    }]);
+  }); // document.querySelectorAll($DATE_BUTTONS).forEach(
+  //   (el) =>
+  //     (el.onclick = () =>
+  //       updateState([
+  //         { type: 'date', payload: el.dataset.date },
+  //         { type: 'time', payload: null },
+  //       ]))
+  // );
 };
 
 const setupModeRadios = () => {
@@ -21739,12 +21751,7 @@ const load = async () => {
   }, {
     type: 'deliveries',
     payload: deliveries
-  }]); // console.log('pickups', pickups);
-  // console.log('deliveries', deliveries);
-  // console.log('availabilities', availabilities);
-  // console.log('next3Days', next3Days);
-  //|-> end of GET DATA FROM CODA
-
+  }]);
   document.querySelector($SHIPPING_LOADER).style.display = 'none';
   document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
   setupModeRadios();

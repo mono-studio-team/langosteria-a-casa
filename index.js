@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.87');
+console.log('||> langosteria v0.88');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -55,10 +55,12 @@ let state = {
 };
 
 const updateState = (actions) => {
-  let nextState;
-  actions.forEach(({ type, payload }) => {
-    nextState = { ...state, ...nextState, [type]: payload };
-  });
+  let nextState = { ...state };
+  if (actions.type !== 'sync') {
+    actions.forEach(({ type, payload }) => {
+      nextState = { ...nextState, [type]: payload };
+    });
+  }
 
   const statelog = {
     mode: nextState.mode,
@@ -338,16 +340,22 @@ const setupDateButtons = () => {
     el.textContent = format(btnDate, 'EEEE d', {
       locale: itLocalize,
     });
+
+    el.onclick = () =>
+      updateState([
+        { type: 'date', payload: el.dataset.date },
+        { type: 'time', payload: null },
+      ]);
   });
 
-  document.querySelectorAll($DATE_BUTTONS).forEach(
-    (el) =>
-      (el.onclick = () =>
-        updateState([
-          { type: 'date', payload: el.dataset.date },
-          { type: 'time', payload: null },
-        ]))
-  );
+  // document.querySelectorAll($DATE_BUTTONS).forEach(
+  //   (el) =>
+  //     (el.onclick = () =>
+  //       updateState([
+  //         { type: 'date', payload: el.dataset.date },
+  //         { type: 'time', payload: null },
+  //       ]))
+  // );
 };
 
 const setupModeRadios = () => {
@@ -432,12 +440,6 @@ const load = async () => {
     { type: 'pickups', payload: pickups },
     { type: 'deliveries', payload: deliveries },
   ]);
-
-  // console.log('pickups', pickups);
-  // console.log('deliveries', deliveries);
-  // console.log('availabilities', availabilities);
-  // console.log('next3Days', next3Days);
-  //|-> end of GET DATA FROM CODA
 
   document.querySelector($SHIPPING_LOADER).style.display = 'none';
   document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
