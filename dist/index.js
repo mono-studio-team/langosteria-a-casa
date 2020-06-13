@@ -21341,7 +21341,7 @@ const {
 
 require('flatpickr/dist/themes/airbnb.css');
 
-console.log('||> langosteria v0.88');
+console.log('||> langosteria v0.89');
 let intervalId;
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -21384,7 +21384,7 @@ const updateState = actions => {
   let nextState = { ...state
   };
 
-  if (actions.type !== 'sync') {
+  if (actions.type !== 'init') {
     actions.forEach(({
       type,
       payload
@@ -21758,6 +21758,9 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
+  updateState([{
+    type: 'init'
+  }]);
 };
 
 setupMaps();

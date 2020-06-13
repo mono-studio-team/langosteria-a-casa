@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.88');
+console.log('||> langosteria v0.89');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -56,7 +56,7 @@ let state = {
 
 const updateState = (actions) => {
   let nextState = { ...state };
-  if (actions.type !== 'sync') {
+  if (actions.type !== 'init') {
     actions.forEach(({ type, payload }) => {
       nextState = { ...nextState, [type]: payload };
     });
@@ -447,6 +447,7 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
+  updateState([{ type: 'init' }]);
 };
 
 setupMaps();
