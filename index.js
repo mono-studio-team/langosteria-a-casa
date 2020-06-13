@@ -12,7 +12,7 @@ const { default: itLocalize } = require('date-fns/locale/it');
 require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.89');
+console.log('||> langosteria v0.90');
 let intervalId;
 
 const condaDocId = 'iOgTgYXs5x';
@@ -56,11 +56,11 @@ let state = {
 
 const updateState = (actions) => {
   let nextState = { ...state };
-  if (actions.type !== 'init') {
-    actions.forEach(({ type, payload }) => {
+  actions.forEach(({ type, payload }) => {
+    if (actions.type !== 'init') {
       nextState = { ...nextState, [type]: payload };
-    });
-  }
+    }
+  });
 
   const statelog = {
     mode: nextState.mode,
