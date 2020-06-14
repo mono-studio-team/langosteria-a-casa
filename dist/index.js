@@ -21341,7 +21341,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.97');
+log('=--> langosteria v0.98');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21350,6 +21350,7 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb'
 };
 const $SHIPPING_LOADER = '#shipping-loader';
+const $PICKUP_ONLY_MESSAGE = '#pickup-only-message';
 const $SHIPPING_OPTIONS = '#shipping-options';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
@@ -21360,11 +21361,11 @@ const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
 const $GHOST_ORDER_DETAILS = '#myOrderDetails';
-const $PICKUP_ONLY_MESSAGE = '#pickup-only-message';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
-document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+document.querySelector($SHIPPING_LOADER).style.display = 'block';
 document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
 let state = {
   pickups: [],
   deliveries: [],
