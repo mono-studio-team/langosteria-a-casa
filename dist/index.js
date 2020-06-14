@@ -21341,7 +21341,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.96');
+log('=--> langosteria v0.97');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21371,7 +21371,8 @@ let state = {
   availabilities: [],
   mode: 'delivery',
   date: null,
-  time: null
+  time: null,
+  canShip: false
 };
 
 const getState = () => state;
@@ -21399,6 +21400,7 @@ const updateState = actions => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
+  updateBoxes(nextState);
   updateJsonString(nextState);
   state = nextState;
 };
@@ -21563,6 +21565,19 @@ const updateCheckoutButton = ({
   }
 };
 
+const updateBoxes = ({
+  mode,
+  canShip
+}) => {
+  if (mode === 'delivery' && !canShip) {
+    document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+    document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
+  } else {
+    document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+    document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+  }
+};
+
 const setupMaps = async () => {
   const {
     axiosInstance
@@ -21579,28 +21594,10 @@ const setupMaps = async () => {
     tableIdOrName: condaTableIds.settingsCaps
   });
   const caps = capsObj.map(i => i['cAP']);
-  (0, _useMaps.default)(caps, canShip => {
-    document.querySelector('input[data-mode=delivery]').disabled = !canShip;
-
-    if (!canShip) {
-      updateState([{
-        type: 'mode',
-        payload: 'pickup'
-      }]);
-      const currentState = getState();
-
-      if (currentState.mode === 'delivery') {
-        document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
-        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
-      } else {
-        document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
-        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
-      }
-    } else {
-      document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
-      document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
-    }
-  });
+  (0, _useMaps.default)(caps, canShip => updateState([{
+    type: 'canShip',
+    canShip
+  }]));
   const script = document.createElement('script');
 
   script.onload = function () {
@@ -21645,7 +21642,7 @@ const setupTimeButtons = () => {
 };
 
 const setupCalendar = () => {
-  document.querySelector($CALENDAR_CONTAINER).innerHTML = '<input class="flatpickr" />';
+  document.querySelector($CALENDAR_CONTAINER).innerHTML = '<input class="flatpickr" placeholder="altra data" />';
 };
 
 const setupDateButtons = () => {

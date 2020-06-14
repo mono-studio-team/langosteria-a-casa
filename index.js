@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.96');
+log('=--> langosteria v0.97');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -49,6 +49,7 @@ let state = {
   mode: 'delivery',
   date: null,
   time: null,
+  canShip: false,
 };
 
 const getState = () => state;
@@ -71,6 +72,7 @@ const updateState = (actions) => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
+  updateBoxes(nextState);
 
   updateJsonString(nextState);
 
@@ -243,6 +245,16 @@ const updateCheckoutButton = ({ mode, date, time }) => {
   }
 };
 
+const updateBoxes = ({ mode, canShip }) => {
+  if (mode === 'delivery' && !canShip) {
+    document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+    document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
+  } else {
+    document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+    document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+  }
+};
+
 const setupMaps = async () => {
   const { axiosInstance } = await import('./useAxios');
   const { coda } = await import('./useCoda');
@@ -255,23 +267,7 @@ const setupMaps = async () => {
   });
   const caps = capsObj.map((i) => i['cAP']);
 
-  useMaps(caps, (canShip) => {
-    document.querySelector('input[data-mode=delivery]').disabled = !canShip;
-    if (!canShip) {
-      updateState([{ type: 'mode', payload: 'pickup' }]);
-      const currentState = getState();
-      if (currentState.mode === 'delivery') {
-        document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
-        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
-      } else {
-        document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
-        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
-      }
-    } else {
-      document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
-      document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
-    }
-  });
+  useMaps(caps, (canShip) => updateState([{ type: 'canShip', canShip }]));
 
   const script = document.createElement('script');
   script.onload = function () {
@@ -328,7 +324,7 @@ const setupTimeButtons = () => {
 
 const setupCalendar = () => {
   document.querySelector($CALENDAR_CONTAINER).innerHTML =
-    '<input class="flatpickr" />';
+    '<input class="flatpickr" placeholder="altra data" />';
 };
 
 const setupDateButtons = () => {
