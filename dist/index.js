@@ -21341,7 +21341,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.99');
+log('=--> langosteria v0.100');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
