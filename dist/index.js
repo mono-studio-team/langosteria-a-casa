@@ -21341,7 +21341,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.95');
+log('=--> langosteria v0.96');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21364,6 +21364,7 @@ const $PICKUP_ONLY_MESSAGE = '#pickup-only-message';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
 let state = {
   pickups: [],
   deliveries: [],
