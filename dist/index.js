@@ -21345,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.101');
+log('=--> langosteria v0.102');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21389,7 +21389,7 @@ const updateState = actions => {
     type,
     payload
   }) => {
-    if (actions.type !== 'init') {
+    if (type !== 'init') {
       nextState = { ...nextState,
         [type]: payload
       };
@@ -21750,7 +21750,7 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 1000));
   updateState([{
     type: 'init'
   }]);

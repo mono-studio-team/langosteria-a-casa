@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.101');
+log('=--> langosteria v0.102');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -58,7 +58,7 @@ const getState = () => state;
 const updateState = (actions) => {
   let nextState = { ...state };
   actions.forEach(({ type, payload }) => {
-    if (actions.type !== 'init') {
+    if (type !== 'init') {
       nextState = { ...nextState, [type]: payload };
     }
   });
@@ -432,7 +432,7 @@ const load = async () => {
   setupTimeButtons();
   setupGhostFields();
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   updateState([{ type: 'init' }]);
 };
