@@ -9,14 +9,14 @@ const {
   differenceInCalendarDays,
 } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
-require('flatpickr/dist/themes/airbnb.css');
 import useMaps from './useMaps';
 
-console.log('||> langosteria v0.93');
-let intervalId;
+const isDev = true;
+const log = (data) => isDev && console.log(data);
+
+log('=--> langosteria v0.94');
 
 const condaDocId = 'iOgTgYXs5x';
-
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
   settingsCaps: 'grid-PjdOUMts6h',
@@ -24,21 +24,19 @@ const condaTableIds = {
   calendarAvailabilities: 'grid-50DT1drYMb',
 };
 
-const filterPickups = (i) => i.iD.startsWith('P');
-const filterDeliveries = (i) => i.iD.startsWith('D');
-
 const $SHIPPING_LOADER = '#shipping-loader';
 const $SHIPPING_OPTIONS = '#shipping-options';
-const $TIME_SECTION = '#time-section';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
+const $CALENDAR_CONTAINER = '#calendar-container';
 const $CALENDAR = '.flatpickr';
 const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
 const $GHOST_ORDER_DETAILS = '#myOrderDetails';
+const $PICKUP_ONLY_MESSAGE = '#pickup-only-message';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
 
@@ -51,8 +49,9 @@ let state = {
   mode: 'delivery',
   date: null,
   time: null,
-  // notes: '',
 };
+
+const getState = () => state;
 
 const updateState = (actions) => {
   let nextState = { ...state };
@@ -67,7 +66,7 @@ const updateState = (actions) => {
     date: nextState.date,
     time: nextState.time,
   };
-  console.log(JSON.stringify(statelog, null, 2));
+  log(JSON.stringify(statelog, null, 2));
   updateDateButtons(nextState);
   updateCalendar(nextState);
   updateTimeButtons(nextState);
@@ -95,7 +94,7 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
     (a) => a.dateFlatpickr === date
   );
 
-  console.log('selectedAvailability', selectedAvailability);
+  log('selectedAvailability', selectedAvailability);
 
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
     // update enable/disable
@@ -171,12 +170,11 @@ const updateCalendar = ({ availabilities, mode, date }) => {
 
   flatpickr($CALENDAR, {
     locale: Italian,
-    wrap: true,
     enable,
     defaultDate: date,
     altInput: true,
     altFormat: 'l j',
-    altInputClass: 'button options display-none',
+    altInputClass: 'button options',
     onChange: (selectedDates, dateStr) =>
       updateState([
         { type: 'date', payload: dateStr },
@@ -198,9 +196,6 @@ const updateTimeButtons = ({
   );
 
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
-    // visibility
-    // el.style.visibility = date ? 'visible' : 'hidden';
-
     // content
     el.textContent =
       mode === 'delivery' ? deliveries[idx].label : pickups[idx].label;
@@ -241,8 +236,10 @@ const updateTimeButtons = ({
 const updateCheckoutButton = ({ mode, date, time }) => {
   if (mode && date && time) {
     document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
+    document.querySelector($CHECKOUT_BUTTON).style.pointerEvents = null;
   } else {
     document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
+    document.querySelector($CHECKOUT_BUTTON).style.pointerEvents = 'none';
   }
 };
 
@@ -262,12 +259,23 @@ const setupMaps = async () => {
     document.querySelector('input[data-mode=delivery]').disabled = !canShip;
     if (!canShip) {
       updateState([{ type: 'mode', payload: 'pickup' }]);
+      const currentState = getState();
+      if (currentState.mode === 'delivery') {
+        document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
+      } else {
+        document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+      }
+    } else {
+      document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+      document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
     }
   });
 
   const script = document.createElement('script');
   script.onload = function () {
-    console.log('maps loaded');
+    log('maps loaded');
   };
   script.src =
     'https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete';
@@ -299,17 +307,13 @@ const setupGhostFields = () => {
 
   document.querySelector($NOTES_TEXTAREA).onkeydown = () =>
     (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
-  // updateNotes('notes', document.querySelector($GHOST_ORDER_DETAILS).value);
   document.querySelector($NOTES_TEXTAREA).onchange = () =>
     (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
-  // updateNotes('notes', document.querySelector($GHOST_ORDER_DETAILS).value);
 
   document.querySelector($INPUT_TELEPHONE).onkeydown = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
-  // updateNotes('tel', document.querySelector($INPUT_TELEPHONE).value);
   document.querySelector($INPUT_TELEPHONE).onchange = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
-  // updateNotes('tel', document.querySelector($INPUT_TELEPHONE).value);
 };
 
 const setupTimeButtons = () => {
@@ -322,12 +326,10 @@ const setupTimeButtons = () => {
     );
 };
 
-const setupCalendar = () =>
-  (document.querySelector($CALENDAR).innerHTML = `
-  <input class="button options" type="text" placeholder="altra data" style="display: none;" data-input>
-
-  <a id="calendar-btn" class="button options input-button" title="toggle" data-toggle>...</a>
-  `);
+const setupCalendar = () => {
+  document.querySelector($CALENDAR_CONTAINER).innerHTML =
+    '<input class="flatpickr" />';
+};
 
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
@@ -339,26 +341,13 @@ const setupDateButtons = () => {
     });
     el.setAttribute('data-date', attributeValue);
 
-    // set label text
-    // el.textContent = format(btnDate, 'EEEE d', {
-    //   locale: itLocalize,
-    // });
-
+    // click event
     el.onclick = () =>
       updateState([
         { type: 'date', payload: el.dataset.date },
         { type: 'time', payload: null },
       ]);
   });
-
-  // document.querySelectorAll($DATE_BUTTONS).forEach(
-  //   (el) =>
-  //     (el.onclick = () =>
-  //       updateState([
-  //         { type: 'date', payload: el.dataset.date },
-  //         { type: 'time', payload: null },
-  //       ]))
-  // );
 };
 
 const setupModeRadios = () => {
@@ -369,6 +358,7 @@ const setupModeRadios = () => {
       radios[0].setAttribute('data-mode', 'delivery');
       radios[1].setAttribute('data-mode', 'pickup');
 
+      // recover state
       const st = getState();
       if (st.mode === 'delivery') {
         document.querySelector('input[data-mode=delivery]').checked = true;
@@ -376,11 +366,7 @@ const setupModeRadios = () => {
         document.querySelector('input[data-mode=pickup]').checked = true;
       }
 
-      // const currentMode = document.querySelector(
-      //   'input[name=shipping-method-choice]:checked'
-      // ).dataset.mode;
-      // updState([{ type: 'mode', payload: currentMode }]);
-
+      // change event
       radios.forEach(
         (el) =>
           (el.onchange = () => {
@@ -392,29 +378,24 @@ const setupModeRadios = () => {
           })
       );
     },
-    1000,
+    300,
     getState,
     updateState
   );
 };
 
-const getState = () => state;
-
 const load = async () => {
   clearInterval(intervalId);
   setupCalendar();
+
+  const filterPickups = (i) => i.iD.startsWith('P');
+  const filterDeliveries = (i) => i.iD.startsWith('D');
 
   const { axiosInstance } = await import('./useAxios');
   const { coda } = await import('./useCoda');
   const { getTableData, getViewData } = coda(axiosInstance);
 
   // GET DATA FROM CODA
-  // const capsObj = await getTableData({
-  //   docId: condaDocId,
-  //   tableIdOrName: condaTableIds.settingsCaps,
-  // });
-  // const caps = capsObj.map((i) => i['cAP']);
-
   const servicesObj = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsServices,
@@ -422,10 +403,10 @@ const load = async () => {
   const pickups = servicesObj.filter(filterPickups);
   const deliveries = servicesObj.filter(filterDeliveries);
 
-  const addresses = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsAddresses,
-  });
+  // const addresses = await getTableData({
+  //   docId: condaDocId,
+  //   tableIdOrName: condaTableIds.settingsAddresses,
+  // });
 
   const availabilities = await getTableData({
     docId: condaDocId,
@@ -446,19 +427,21 @@ const load = async () => {
 
   document.querySelector($SHIPPING_LOADER).style.display = 'none';
   document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
+
   updateState([{ type: 'init' }]);
 };
 
 setupMaps();
 
-intervalId = setInterval(function () {
-  console.log('search for radios...');
+let intervalId = setInterval(function () {
+  log('search for radios...');
   if (!!document.querySelector($MODE_RADIO)) {
-    console.log('radios found!');
+    log('radios found!');
     load();
   }
 }, 1000);

@@ -21060,7 +21060,145 @@ var locale = {
 };
 var _default = locale;
 exports.default = _default;
-},{"./_lib/formatDistance/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatDistance/index.js","./_lib/formatLong/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatLong/index.js","./_lib/formatRelative/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatRelative/index.js","./_lib/localize/index.js":"node_modules/date-fns/esm/locale/it/_lib/localize/index.js","./_lib/match/index.js":"node_modules/date-fns/esm/locale/it/_lib/match/index.js"}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./_lib/formatDistance/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatDistance/index.js","./_lib/formatLong/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatLong/index.js","./_lib/formatRelative/index.js":"node_modules/date-fns/esm/locale/it/_lib/formatRelative/index.js","./_lib/localize/index.js":"node_modules/date-fns/esm/locale/it/_lib/localize/index.js","./_lib/match/index.js":"node_modules/date-fns/esm/locale/it/_lib/match/index.js"}],"useMaps.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+// elenco dei cap ammessi
+// var caps = [
+//   '20121',
+//   '20122',
+//   '20123',
+//   '20124',
+//   '20129',
+//   '20135',
+//   '20136',
+//   '20144',
+//   '20145',
+//   '20146',
+//   '20149',
+//   '20151',
+//   '20154',
+//   '20159',
+// ];
+var _default = (caps, onCheckShippingCoverage) => {
+  var placeSearch, autocomplete;
+  var componentForm = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_2: 'short_name',
+    country: 'short_name',
+    postal_code: 'short_name'
+  };
+
+  window.initAutocomplete = function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('route_street_number'), {
+      types: ['geocode']
+    });
+    autocomplete.setFields(['address_component']);
+    autocomplete.addListener('place_changed', () => fillInAddress(caps));
+    autocomplete.setComponentRestrictions({
+      country: 'it'
+    }); // con questo evento ascoltiamo le immissioni manuali nell' input
+    // ed anche l'auto-fill del browser
+
+    document.querySelector('[data-address="postal_code"]').addEventListener('input', function () {
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+    document.querySelector('[data-address="postal_code"]').addEventListener('keydown', function () {
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+    document.querySelector('[data-address="postal_code"]').addEventListener('blur', function () {
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    });
+  }; // controllo del cap corrente
+
+
+  function checkShippingCoverage(caps, postal_code) {
+    // se in lista o minore di 5 caratteri o campo vuoto -> non mostra errore
+    // altrimenti -> mostra errore
+    if (caps.includes(postal_code) || postal_code.length < 5 || !postal_code.length) {
+      onCheckShippingCoverage(true); // document.querySelector('#area-check-pass').style.display = 'block';
+
+      document.querySelector('#area-check-error').style.display = 'none'; // document.querySelector('#btn-checkout').style.display = 'block';
+    } else {
+      onCheckShippingCoverage(false); // document.querySelector('#area-check-pass').style.display = 'none';
+
+      document.querySelector('#area-check-error').style.display = 'block'; // document.querySelector('#btn-checkout').style.display = 'none';
+    }
+  }
+
+  function fillInAddress(caps) {
+    var place = autocomplete.getPlace();
+    let route;
+    let street_number;
+
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+
+        switch (addressType) {
+          case 'route':
+            route = val;
+            break;
+
+          case 'street_number':
+            street_number = val;
+            break;
+
+          case 'country':
+            document.querySelector('[data-address="country"]').value = val;
+            break;
+
+          default:
+            document.querySelector(`[data-address='${addressType}']`).value = val;
+        }
+
+        if (addressType === 'postal_code') {
+          checkShippingCoverage(caps, val);
+        }
+      }
+    } // se il numero civico e' presente
+    // concatena via e numero civico nello stesso input
+
+
+    const route_street_number = street_number ? `${route}, ${street_number}` : route;
+
+    if (route_street_number) {
+      document.querySelector(`[data-address='route_street_number']`).value = route_street_number;
+    }
+  }
+
+  function geolocate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+  }
+};
+/* <script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete"></script>; */
+
+
+exports.default = _default;
+},{}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -21092,47 +21230,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
-}
-
-module.exports = reloadCSS;
-},{"./bundle-url":"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"node_modules/flatpickr/dist/themes/airbnb.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-loader.js":[function(require,module,exports) {
+},{}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-loader.js":[function(require,module,exports) {
 var getBundleURL = require('./bundle-url').getBundleURL;
 
 function loadBundlesLazy(bundles) {
@@ -21222,6 +21320,8 @@ var _flatpickr = _interopRequireDefault(require("flatpickr"));
 
 var _it = require("flatpickr/dist/l10n/it.js");
 
+var _useMaps = _interopRequireDefault(require("./useMaps"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const {
@@ -21237,10 +21337,11 @@ const {
   default: itLocalize
 } = require('date-fns/locale/it');
 
-require('flatpickr/dist/themes/airbnb.css');
+const isDev = true;
 
-console.log('>>langosteria@0.62<<');
-let intervalId;
+const log = data => isDev && console.log(data);
+
+log('=--> langosteria v0.94');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21248,71 +21349,76 @@ const condaTableIds = {
   settingsAddresses: 'grid-rp5_HDm90K',
   calendarAvailabilities: 'grid-50DT1drYMb'
 };
-
-const filterPickups = i => i.nome.startsWith('Pickup');
-
-const filterDeliveries = i => i.nome.startsWith('Delivery');
-
+const $SHIPPING_LOADER = '#shipping-loader';
 const $SHIPPING_OPTIONS = '#shipping-options';
-const $TIME_SECTION = '#time-section';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
+const $CALENDAR_CONTAINER = '#calendar-container';
 const $CALENDAR = '.flatpickr';
 const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
-const $GHOST_ORDER_DETAILS = '#orderDetails';
+const $INPUT_TELEPHONE = 'input[name=telefono]';
+const $GHOST_ORDER_DETAILS = '#myOrderDetails';
+const $PICKUP_ONLY_MESSAGE = '#pickup-only-message';
 const $CLASS_SELECTED = 'selected';
 const $CLASS_DISABLED = 'disabled';
+document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
 let state = {
   pickups: [],
   deliveries: [],
   availabilities: [],
   mode: 'delivery',
   date: null,
-  time: null // notes: '',
-
+  time: null
 };
 
+const getState = () => state;
+
 const updateState = actions => {
-  let nextState;
+  let nextState = { ...state
+  };
   actions.forEach(({
     type,
     payload
   }) => {
-    nextState = { ...state,
-      ...nextState,
-      [type]: payload
-    };
+    if (actions.type !== 'init') {
+      nextState = { ...nextState,
+        [type]: payload
+      };
+    }
   });
   const statelog = {
     mode: nextState.mode,
     date: nextState.date,
     time: nextState.time
   };
-  console.log(JSON.stringify(statelog, null, 2));
+  log(JSON.stringify(statelog, null, 2));
   updateDateButtons(nextState);
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
+  updateJsonString(nextState);
   state = nextState;
 };
 
-const updateNotes = notes => {
-  const {
-    mode,
-    date,
-    time
-  } = state;
-  const dataString = JSON.stringify({
+const updateJsonString = ({
+  mode,
+  date,
+  time
+}) => {
+  if (!document.querySelector($GHOST_ORDER_DETAILS)) return;
+  const notes = document.querySelector('#myNotes').value;
+  const telephone = document.querySelector('#myTelephone').value;
+  const finalState = {
     mode,
     date,
     time,
-    notes
-  });
-  document.querySelector($NOTES_TEXTAREA).value = dataString; // const nextState = { ...state, notes };
-  // state = nextState;
+    notes,
+    telephone
+  };
+  document.querySelector($GHOST_ORDER_DETAILS).value = JSON.stringify(finalState);
 };
 
 const updateDateButtons = ({
@@ -21321,60 +21427,37 @@ const updateDateButtons = ({
   date
 }) => {
   const selectedAvailability = availabilities.find(a => a.dateFlatpickr === date);
-  console.log('selectedAvailability', selectedAvailability);
+  log('selectedAvailability', selectedAvailability);
   document.querySelectorAll($DATE_BUTTONS).forEach(el => {
     // update enable/disable
-    const availability = availabilities.find(a => a.dateFlatpickr === el.dataset.date); // enabled/disabled
+    const availability = availabilities.find(a => a.dateFlatpickr === el.dataset.date);
 
-    let isDisabled;
+    if (availability) {
+      // enabled/disabled
+      let isDisabled;
 
-    if (date && mode === 'delivery' && !availability.d1Availability && !availability.d2Availability) {
-      isDisabled = true;
-      el.classList.add($CLASS_DISABLED);
-      el.style.pointerEvents = 'none';
-    } else if (date && mode === 'pickup' && !availability.p1Availability && !availability.p2Availability) {
-      isDisabled = true;
-      el.classList.remove($CLASS_DISABLED);
-      el.style.pointerEvents = null;
-    } // selected or not
+      if (mode === 'delivery' && !availability.d1Availability && !availability.d2Availability) {
+        isDisabled = true;
+      } else if (mode === 'pickup' && !availability.p1Availability && !availability.p2Availability) {
+        isDisabled = true;
+      }
+
+      if (isDisabled) {
+        el.classList.add($CLASS_DISABLED);
+        el.classList.remove($CLASS_SELECTED);
+        el.style.pointerEvents = 'none';
+      } else {
+        el.classList.remove($CLASS_DISABLED);
+        el.style.pointerEvents = null;
+      } // selected or not
 
 
-    if (selectedAvailability && el.dataset.date === selectedAvailability.dateFlatpickr) {
-      el.classList.add($CLASS_SELECTED);
-    } else {
-      el.classList.remove($CLASS_SELECTED);
-    } // // clean
-    // el.classList.remove($CLASS_SELECTED);
-    // el.classList.remove($CLASS_DISABLED);
-    // el.style.pointerEvents = null;
-    // let isDisabled;
-    // if (
-    //   date &&
-    //   mode === 'delivery' &&
-    //   !availability.d1Availability &&
-    //   !availability.d2Availability
-    // ) {
-    //   isDisabled = true;
-    // } else if (
-    //   date &&
-    //   mode === 'pickup' &&
-    //   !availability.p1Availability &&
-    //   !availability.p2Availability
-    // ) {
-    //   isDisabled = true;
-    // }
-    // if (isDisabled) {
-    //   el.classList.add($CLASS_DISABLED);
-    //   el.style.pointerEvents = 'none';
-    // }
-    // // update selected css
-    // if (
-    //   selectedAvailability &&
-    //   el.dataset.date === selectedAvailability.dateFlatpickr
-    // ) {
-    //   el.classList.add($CLASS_SELECTED);
-    // }
-
+      if (selectedAvailability && el.dataset.date === selectedAvailability.dateFlatpickr) {
+        el.classList.add($CLASS_SELECTED);
+      } else {
+        el.classList.remove($CLASS_SELECTED);
+      }
+    }
   });
 };
 
@@ -21410,11 +21493,10 @@ const updateCalendar = ({
 
   (0, _flatpickr.default)($CALENDAR, {
     locale: _it.Italian,
-    wrap: true,
     enable,
     defaultDate: date,
     altInput: true,
-    altFormat: 'j/n/Y',
+    altFormat: 'l j',
     altInputClass: 'button options',
     onChange: (selectedDates, dateStr) => updateState([{
       type: 'date',
@@ -21434,29 +21516,24 @@ const updateTimeButtons = ({
   date,
   time
 }) => {
-  if (!date) {
-    document.querySelector($TIME_SECTION).style.visibility = 'hidden';
-    return;
-  }
-
-  document.querySelector($TIME_SECTION).style.visibility = 'visible';
   const selectedAvailability = availabilities.find(a => a.dateFlatpickr === date);
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
-    // visibility
-    el.style.visibility = date ? 'visible' : 'hidden'; // content
-
+    // content
     el.textContent = mode === 'delivery' ? deliveries[idx].label : pickups[idx].label; // enabled/disabled
 
     let isDisabled;
 
-    if (date && mode === 'delivery') {
+    if (!date) {
+      isDisabled = true;
+    } else if (date && mode === 'delivery') {
       isDisabled = el.dataset.timeslot === '1' ? !selectedAvailability.d1Availability : !selectedAvailability.d2Availability;
     } else if (date && mode === 'pickup') {
-      isDisabled = el.dataset.timeslot === '2' ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
+      isDisabled = el.dataset.timeslot === '1' ? !selectedAvailability.p1Availability : !selectedAvailability.p2Availability;
     }
 
     if (isDisabled) {
       el.classList.add($CLASS_DISABLED);
+      el.classList.remove($CLASS_SELECTED);
       el.style.pointerEvents = 'none';
     } else {
       el.classList.remove($CLASS_DISABLED);
@@ -21468,41 +21545,7 @@ const updateTimeButtons = ({
       el.classList.add($CLASS_SELECTED);
     } else {
       el.classList.remove($CLASS_SELECTED);
-    } // // clean
-    // el.classList.remove($CLASS_SELECTED);
-    // el.classList.remove($CLASS_DISABLED);
-    // el.style.pointerEvents = null;
-    // if (mode === 'delivery') {
-    //   el.textContent = deliveries[idx].label;
-    // } else {
-    //   el.textContent = pickups[idx].label;
-    // }
-    // // update enabled/disabled
-    // let isDisabled;
-    // if (date && mode === 'delivery') {
-    //   isDisabled =
-    //     el.dataset.timeslot === '1'
-    //       ? !selectedAvailability.d1Availability
-    //       : !selectedAvailability.d2Availability;
-    // } else if (date && mode === 'pickup') {
-    //   isDisabled =
-    //     el.dataset.timeslot === '2'
-    //       ? !selectedAvailability.p1Availability
-    //       : !selectedAvailability.p2Availability;
-    // }
-    // if (isDisabled) {
-    //   el.classList.add($CLASS_DISABLED);
-    //   el.style.pointerEvents = 'none';
-    // }
-    // // update selected css
-    // if (!time) {
-    //   el.classList.remove($CLASS_SELECTED);
-    // } else if (el.dataset.timeslot === time) {
-    //   el.classList.add($CLASS_SELECTED);
-    // } else {
-    //   el.classList.remove($CLASS_SELECTED);
-    // }
-
+    }
   });
 };
 
@@ -21511,20 +21554,87 @@ const updateCheckoutButton = ({
   date,
   time
 }) => {
-  const visibility = mode && date && time ? 'visible' : 'hidden';
-  document.querySelector($CHECKOUT_BUTTON).style.visibility = visibility;
+  if (mode && date && time) {
+    document.querySelector($CHECKOUT_BUTTON).classList.remove($CLASS_DISABLED);
+    document.querySelector($CHECKOUT_BUTTON).style.pointerEvents = null;
+  } else {
+    document.querySelector($CHECKOUT_BUTTON).classList.add($CLASS_DISABLED);
+    document.querySelector($CHECKOUT_BUTTON).style.pointerEvents = 'none';
+  }
 };
 
-const setupGhostOrderDetails = () => {
+const setupMaps = async () => {
+  const {
+    axiosInstance
+  } = await require("_bundle_loader")(require.resolve('./useAxios'));
+  const {
+    coda
+  } = await require("_bundle_loader")(require.resolve('./useCoda'));
+  const {
+    getTableData
+  } = coda(axiosInstance); // GET DATA FROM CODA
+
+  const capsObj = await getTableData({
+    docId: condaDocId,
+    tableIdOrName: condaTableIds.settingsCaps
+  });
+  const caps = capsObj.map(i => i['cAP']);
+  (0, _useMaps.default)(caps, canShip => {
+    document.querySelector('input[data-mode=delivery]').disabled = !canShip;
+
+    if (!canShip) {
+      updateState([{
+        type: 'mode',
+        payload: 'pickup'
+      }]);
+      const currentState = getState();
+
+      if (currentState.mode === 'delivery') {
+        document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
+        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
+      } else {
+        document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+        document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+      }
+    } else {
+      document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
+      document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'none';
+    }
+  });
+  const script = document.createElement('script');
+
+  script.onload = function () {
+    log('maps loaded');
+  };
+
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAWDAlwUG-CInbppjWfuIjdocPX-zUzAxU&libraries=places&callback=initAutocomplete';
+  document.body.appendChild(script);
+};
+
+const setupGhostFields = () => {
   const ghostOrderDetails = document.createElement('textarea');
-  ghostOrderDetails.id = 'orderDetails';
-  ghostOrderDetails.name = 'orderDetails';
+  ghostOrderDetails.id = 'myOrderDetails';
+  ghostOrderDetails.name = 'myOrderDetails';
   document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostOrderDetails);
   ghostOrderDetails.style.display = 'none';
+  const ghostNotes = document.createElement('textarea');
+  ghostNotes.id = 'myNotes';
+  ghostNotes.name = 'myNotes';
+  document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostNotes);
+  ghostNotes.style.display = 'none';
+  const ghostTelephone = document.createElement('textarea');
+  ghostTelephone.id = 'myTelephone';
+  ghostTelephone.name = 'myTelephone';
+  document.querySelector($NOTES_TEXTAREA).parentElement.appendChild(ghostTelephone);
+  ghostTelephone.style.display = 'none';
 
-  document.querySelector($NOTES_TEXTAREA).onkeydown = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+  document.querySelector($NOTES_TEXTAREA).onkeydown = () => ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value;
 
-  document.querySelector($NOTES_TEXTAREA).onchange = () => updateNotes(document.querySelector($GHOST_ORDER_DETAILS).value);
+  document.querySelector($NOTES_TEXTAREA).onchange = () => ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value;
+
+  document.querySelector($INPUT_TELEPHONE).onkeydown = () => ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value;
+
+  document.querySelector($INPUT_TELEPHONE).onchange = () => ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value;
 };
 
 const setupTimeButtons = () => {
@@ -21534,11 +21644,9 @@ const setupTimeButtons = () => {
   }]));
 };
 
-const setupCalendar = () => document.querySelector($CALENDAR).innerHTML = `
-  <input class="button options" type="text" placeholder="altra data" style="display: none;" data-input>
-
-  <a id="calendar-btn" class="button options input-button" title="toggle" data-toggle>...</a>
-  `;
+const setupCalendar = () => {
+  document.querySelector($CALENDAR_CONTAINER).innerHTML = '<input class="flatpickr" />';
+};
 
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach(el => {
@@ -21547,35 +21655,32 @@ const setupDateButtons = () => {
     const attributeValue = format(btnDate, 'yyyy-MM-dd', {
       locale: itLocalize
     });
-    el.setAttribute('data-date', attributeValue); // set label text
+    el.setAttribute('data-date', attributeValue); // click event
 
-    el.textContent = format(btnDate, 'EEEE d', {
-      locale: itLocalize
-    });
+    el.onclick = () => updateState([{
+      type: 'date',
+      payload: el.dataset.date
+    }, {
+      type: 'time',
+      payload: null
+    }]);
   });
-  document.querySelectorAll($DATE_BUTTONS).forEach(el => el.onclick = () => updateState([{
-    type: 'date',
-    payload: el.dataset.date
-  }, {
-    type: 'time',
-    payload: null
-  }]));
 };
 
 const setupModeRadios = () => {
-  setInterval(function (st, updState) {
+  setInterval(function (getState, updState) {
     const radios = document.querySelectorAll($MODE_RADIO);
     if (radios[0].dataset.mode) return;
     radios[0].setAttribute('data-mode', 'delivery');
-    radios[1].setAttribute('data-mode', 'pickup');
+    radios[1].setAttribute('data-mode', 'pickup'); // recover state
 
-    if (state.mode) {
-      radios[0].checked = st.mode === 'delivery';
-      radios[1].checked = st.mode === 'pickup';
-    } // const currentMode = document.querySelector(
-    //   'input[name=shipping-method-choice]:checked'
-    // ).dataset.mode;
-    // updState([{ type: 'mode', payload: currentMode }]);
+    const st = getState();
+
+    if (st.mode === 'delivery') {
+      document.querySelector('input[data-mode=delivery]').checked = true;
+    } else if (st.mode === 'pickup') {
+      document.querySelector('input[data-mode=pickup]').checked = true;
+    } // change event
 
 
     radios.forEach(el => el.onchange = () => {
@@ -21590,12 +21695,17 @@ const setupModeRadios = () => {
         payload: null
       }]);
     });
-  }, 1000, state, updateState);
+  }, 300, getState, updateState);
 };
 
 const load = async () => {
   clearInterval(intervalId);
   setupCalendar();
+
+  const filterPickups = i => i.iD.startsWith('P');
+
+  const filterDeliveries = i => i.iD.startsWith('D');
+
   const {
     axiosInstance
   } = await require("_bundle_loader")(require.resolve('./useAxios'));
@@ -21612,11 +21722,11 @@ const load = async () => {
     tableIdOrName: condaTableIds.settingsServices
   });
   const pickups = servicesObj.filter(filterPickups);
-  const deliveries = servicesObj.filter(filterDeliveries);
-  const addresses = await getTableData({
-    docId: condaDocId,
-    tableIdOrName: condaTableIds.settingsAddresses
-  });
+  const deliveries = servicesObj.filter(filterDeliveries); // const addresses = await getTableData({
+  //   docId: condaDocId,
+  //   tableIdOrName: condaTableIds.settingsAddresses,
+  // });
+
   const availabilities = await getTableData({
     docId: condaDocId,
     tableIdOrName: condaTableIds.calendarAvailabilities
@@ -21631,28 +21741,28 @@ const load = async () => {
   }, {
     type: 'deliveries',
     payload: deliveries
-  }]); // console.log('pickups', pickups);
-  // console.log('deliveries', deliveries);
-  // console.log('availabilities', availabilities);
-  // console.log('next3Days', next3Days);
-  //|-> end of GET DATA FROM CODA
-
-  document.querySelector($SHIPPING_OPTIONS).style.visibility = 'visible';
+  }]);
+  document.querySelector($SHIPPING_LOADER).style.display = 'none';
+  document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
   setupModeRadios();
   setupDateButtons();
   setupTimeButtons();
-  setupGhostOrderDetails();
+  setupGhostFields();
+  updateState([{
+    type: 'init'
+  }]);
 };
 
-intervalId = setInterval(function () {
-  console.log('search for radios...');
+setupMaps();
+let intervalId = setInterval(function () {
+  log('search for radios...');
 
   if (!!document.querySelector($MODE_RADIO)) {
-    console.log('radios found!');
+    log('radios found!');
     load();
   }
 }, 1000);
-},{"flatpickr":"node_modules/flatpickr/dist/flatpickr.js","flatpickr/dist/l10n/it.js":"node_modules/flatpickr/dist/l10n/it.js","date-fns":"node_modules/date-fns/esm/index.js","date-fns/locale/it":"node_modules/date-fns/esm/locale/it/index.js","flatpickr/dist/themes/airbnb.css":"node_modules/flatpickr/dist/themes/airbnb.css","_bundle_loader":"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-loader.js","./useAxios":[["useAxios.3e4741d4.js","useAxios.js"],"useAxios.3e4741d4.js.map","useAxios.js"],"./useCoda":[["useCoda.3d02c120.js","useCoda.js"],"useCoda.3d02c120.js.map","useCoda.js"]}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"flatpickr":"node_modules/flatpickr/dist/flatpickr.js","flatpickr/dist/l10n/it.js":"node_modules/flatpickr/dist/l10n/it.js","date-fns":"node_modules/date-fns/esm/index.js","date-fns/locale/it":"node_modules/date-fns/esm/locale/it/index.js","./useMaps":"useMaps.js","_bundle_loader":"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/bundle-loader.js","./useAxios":[["useAxios.3e4741d4.js","useAxios.js"],"useAxios.3e4741d4.js.map","useAxios.js"],"./useCoda":[["useCoda.3d02c120.js","useCoda.js"],"useCoda.3d02c120.js.map","useCoda.js"]}],"../../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -21680,7 +21790,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62468" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64685" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
