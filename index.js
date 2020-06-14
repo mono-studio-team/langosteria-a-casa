@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.98');
+log('=--> langosteria v0.99');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -268,7 +268,9 @@ const setupMaps = async () => {
   });
   const caps = capsObj.map((i) => i['cAP']);
 
-  useMaps(caps, (canShip) => updateState([{ type: 'canShip', canShip }]));
+  useMaps(caps, (canShip) =>
+    updateState([{ type: 'canShip', payload: canShip }])
+  );
 
   const script = document.createElement('script');
   script.onload = function () {
