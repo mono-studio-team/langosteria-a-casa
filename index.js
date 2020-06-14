@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.100');
+log('=--> langosteria v0.101');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {

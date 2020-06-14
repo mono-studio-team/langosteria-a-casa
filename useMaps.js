@@ -63,6 +63,13 @@ export default (caps, onCheckShippingCoverage) => {
           document.querySelector('[data-address="postal_code"]').value
         );
       });
+
+    if (document.querySelector('[data-address="postal_code"]').value) {
+      checkShippingCoverage(
+        caps,
+        document.querySelector('[data-address="postal_code"]').value
+      );
+    }
   };
 
   // controllo del cap corrente

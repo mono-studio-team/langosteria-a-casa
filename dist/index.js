@@ -21116,6 +21116,10 @@ var _default = (caps, onCheckShippingCoverage) => {
     document.querySelector('[data-address="postal_code"]').addEventListener('blur', function () {
       checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
     });
+
+    if (document.querySelector('[data-address="postal_code"]').value) {
+      checkShippingCoverage(caps, document.querySelector('[data-address="postal_code"]').value);
+    }
   }; // controllo del cap corrente
 
 
@@ -21341,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.100');
+log('=--> langosteria v0.101');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
