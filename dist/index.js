@@ -21345,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-log('=--> langosteria v0.102');
+log('=--> langosteria v0.103');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21523,6 +21523,7 @@ const updateTimeButtons = ({
   date,
   time
 }) => {
+  if (!pickups || !pickups.length) return;
   const selectedAvailability = availabilities.find(a => a.dateFlatpickr === date);
   document.querySelectorAll($TIME_BUTTONS).forEach((el, idx) => {
     // content

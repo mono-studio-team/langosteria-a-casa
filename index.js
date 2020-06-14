@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.102');
+log('=--> langosteria v0.103');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -194,6 +194,8 @@ const updateTimeButtons = ({
   date,
   time,
 }) => {
+  if (!pickups || !pickups.length) return;
+
   const selectedAvailability = availabilities.find(
     (a) => a.dateFlatpickr === date
   );
