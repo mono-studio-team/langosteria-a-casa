@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.94');
+log('=--> langosteria v0.95');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -31,7 +31,6 @@ const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
 const $CALENDAR_CONTAINER = '#calendar-container';
 const $CALENDAR = '.flatpickr';
-const $CALENDAR_BTN = '#calendar-btn';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
@@ -163,9 +162,9 @@ const updateCalendar = ({ availabilities, mode, date }) => {
   const difference = differenceInCalendarDays(selDate, new Date());
 
   if (difference >= 3) {
-    document.querySelector($CALENDAR_BTN).classList.add($CLASS_SELECTED);
+    document.querySelector($CALENDAR).classList.add($CLASS_SELECTED);
   } else {
-    document.querySelector($CALENDAR_BTN).classList.remove($CLASS_SELECTED);
+    document.querySelector($CALENDAR).classList.remove($CLASS_SELECTED);
   }
 
   flatpickr($CALENDAR, {
