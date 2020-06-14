@@ -432,6 +432,8 @@ const load = async () => {
   setupTimeButtons();
   setupGhostFields();
 
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
   updateState([{ type: 'init' }]);
 };
 
