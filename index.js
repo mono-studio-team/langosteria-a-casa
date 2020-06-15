@@ -11,10 +11,10 @@ const {
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = false;
+const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v0.106');
+console.log('v0.107');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
