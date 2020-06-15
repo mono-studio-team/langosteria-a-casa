@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-log('=--> langosteria v0.104');
+console.log('=--> L-v0.105');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -313,7 +313,7 @@ const setupGhostFields = () => {
 
   document.querySelector($INPUT_TELEPHONE).onkeydown = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
-  document.querySelector($INPUT_TELEPHONE).onchange = () =>
+  document.querySelector($INPUT_TELEPHONE).oninput = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
 };
 
