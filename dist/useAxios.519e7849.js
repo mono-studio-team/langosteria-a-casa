@@ -55,6 +55,6 @@ var e=require("process"),t=require("./utils"),r=require("./helpers/normalizeHead
 },{"./utils":"Feqj","./helpers/bind":"hRTX","./core/Axios":"trUU","./core/mergeConfig":"fBI1","./defaults":"A14q","./cancel/Cancel":"qFUg","./cancel/CancelToken":"VgQU","./cancel/isCancel":"mXc0","./helpers/spread":"yisB"}],"O4Aa":[function(require,module,exports) {
 module.exports=require("./lib/axios");
 },{"./lib/axios":"Wzmt"}],"KB3V":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.axiosInstance=void 0;var e=t(require("axios"));function t(e){return e&&e.__esModule?e:{default:e}}const a=e.default.create({baseURL:"https://coda.io/apis/v1beta1",headers:{Authorization:"Bearer undefined"}});exports.axiosInstance=a;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.axiosInstance=void 0;var e=a(require("axios"));function a(e){return e&&e.__esModule?e:{default:e}}const t=e.default.create({baseURL:"https://coda.io/apis/v1beta1",headers:{Authorization:"Bearer d503e560-f2b2-47a3-8d53-eba1eb28feda"}});exports.axiosInstance=t;
 },{"axios":"O4Aa"}]},{},["KB3V"], null)
-//# sourceMappingURL=/useAxios.b8e25d6c.js.map
+//# sourceMappingURL=/useAxios.519e7849.js.map
