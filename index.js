@@ -11,10 +11,10 @@ const {
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = true;
+const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v0.109');
+console.log('v0.111');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -310,8 +310,12 @@ const setupGhostFields = () => {
     (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
   document.querySelector($NOTES_TEXTAREA).onchange = () =>
     (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
+  document.querySelector($NOTES_TEXTAREA).oninput = () =>
+    (ghostNotes.value = document.querySelector($NOTES_TEXTAREA).value);
 
   document.querySelector($INPUT_TELEPHONE).onkeydown = () =>
+    (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
+  document.querySelector($INPUT_TELEPHONE).onchange = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
   document.querySelector($INPUT_TELEPHONE).oninput = () =>
     (ghostTelephone.value = document.querySelector($INPUT_TELEPHONE).value);
