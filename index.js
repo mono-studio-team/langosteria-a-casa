@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v0.112');
+console.log('v0.113');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -73,9 +73,7 @@ const updateState = (actions) => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
-  if (actions[0].type !== 'init') {
-    updateBoxes(nextState);
-  }
+  updateBoxes(nextState);
 
   updateJsonString(nextState);
 
@@ -251,6 +249,7 @@ const updateCheckoutButton = ({ mode, date, time }) => {
 };
 
 const updateBoxes = ({ mode, canShip }) => {
+  document.querySelector($SHIPPING_LOADER).style.display = 'none';
   if (mode === 'delivery' && !canShip) {
     document.querySelector($SHIPPING_OPTIONS).style.display = 'none';
     document.querySelector($PICKUP_ONLY_MESSAGE).style.display = 'block';
@@ -431,9 +430,6 @@ const load = async () => {
     { type: 'pickups', payload: pickups },
     { type: 'deliveries', payload: deliveries },
   ]);
-
-  document.querySelector($SHIPPING_LOADER).style.display = 'none';
-  document.querySelector($SHIPPING_OPTIONS).style.display = 'block';
 
   setupModeRadios();
   setupDateButtons();
