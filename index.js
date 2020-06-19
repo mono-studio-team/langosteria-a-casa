@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v0.111');
+console.log('v0.112');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -73,7 +73,9 @@ const updateState = (actions) => {
   updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
-  updateBoxes(nextState);
+  if (actions[0].type !== 'init') {
+    updateBoxes(nextState);
+  }
 
   updateJsonString(nextState);
 
