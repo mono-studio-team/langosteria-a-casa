@@ -824,6 +824,11 @@ source-map@^0.5.6, source-map@^0.5.7:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
+spacetime@^6.6.4:
+  version "6.6.4"
+  resolved "https://registry.yarnpkg.com/spacetime/-/spacetime-6.6.4.tgz#671d25824f82a779f30eb1bb3d6b2da57467b353"
+  integrity sha512-zqrj0LUhsX51Zxeg7zBPjadbQZtUpQYoVuFLWWQM+YX9dh4WabaL5RKvQ8kWQaH+iloFQ9O8+w0cVSrpo/El6Q==
+
 strip-ansi@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-3.0.1.tgz#6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"

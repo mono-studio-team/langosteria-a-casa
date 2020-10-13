@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.102');
+console.log('v1.106');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -397,6 +397,15 @@ const load = async () => {
   const filterPickups = (i) => i.iD.startsWith('P');
   const filterDeliveries = (i) => i.iD.startsWith('D');
 
+  const spacetimeConvert = (t) => spacetime(t).goto('Europe/Rome').iso();
+
+  const convertTimes = (i) => ({
+    ...i,
+    cutoffTime: spacetimeConvert(i.cutoffTime),
+    pickupTime: spacetimeConvert(i.pickupTime),
+    dropoffTime: spacetimeConvert(i.dropoffTime),
+  });
+
   const { axiosInstance } = await import('./useAxios');
   const { coda } = await import('./useCoda');
   const { getTableData, getViewData } = coda(axiosInstance);
@@ -406,8 +415,8 @@ const load = async () => {
     docId: condaDocId,
     tableIdOrName: condaTableIds.settingsServices,
   });
-  const pickups = servicesObj.filter(filterPickups);
-  const deliveries = servicesObj.filter(filterDeliveries);
+  const pickups = servicesObj.filter(filterPickups).map(convertTimes);
+  const deliveries = servicesObj.filter(filterDeliveries).map(convertTimes);
 
   // const addresses = await getTableData({
   //   docId: condaDocId,
