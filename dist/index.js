@@ -21341,11 +21341,11 @@ const {
   default: itLocalize
 } = require('date-fns/locale/it');
 
-const isDev = false;
+const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.106');
+console.log('v1.107');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21501,6 +21501,7 @@ const updateCalendar = ({
   (0, _flatpickr.default)($CALENDAR, {
     locale: _it.Italian,
     enable,
+    disableMobile: 'true',
     defaultDate: date,
     altInput: true,
     altFormat: 'l j',
