@@ -21345,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.108');
+console.log('v1.110');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21481,10 +21481,13 @@ const updateCalendar = ({
     }
 
     return res;
-  }, []); // const fp = document.querySelector($CALENDAR)._flatpickr;
-  // if (fp && fp.destroy) {
-  //   fp.destroy();
-  // }
+  }, []);
+
+  const fp = document.querySelector($CALENDAR)._flatpickr;
+
+  if (fp && fp.destroy) {
+    fp.destroy();
+  }
 
   const selDate = parse(date, 'yyyy-MM-dd', new Date());
   const difference = differenceInCalendarDays(selDate, new Date());
@@ -21498,7 +21501,6 @@ const updateCalendar = ({
   (0, _flatpickr.default)($CALENDAR, {
     locale: _it.Italian,
     enable,
-    disableMobile: 'true',
     defaultDate: date,
     altInput: true,
     altFormat: 'l j',
