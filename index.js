@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.107');
+console.log('v1.108');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -157,10 +157,10 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     return res;
   }, []);
 
-  const fp = document.querySelector($CALENDAR)._flatpickr;
-  if (fp && fp.destroy) {
-    fp.destroy();
-  }
+  // const fp = document.querySelector($CALENDAR)._flatpickr;
+  // if (fp && fp.destroy) {
+  //   fp.destroy();
+  // }
 
   const selDate = parse(date, 'yyyy-MM-dd', new Date());
   const difference = differenceInCalendarDays(selDate, new Date());
