@@ -21409,7 +21409,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.115');
+console.log('v1.116');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21465,8 +21465,8 @@ const updateState = actions => {
     time: nextState.time
   };
   log(JSON.stringify(statelog, null, 2));
-  updateDateButtons(nextState);
-  updateCalendar(nextState);
+  updateDateButtons(nextState); // updateCalendar(nextState);
+
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
   updateBoxes(nextState);
