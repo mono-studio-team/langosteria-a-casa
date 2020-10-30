@@ -21345,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.112');
+console.log('v1.113');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21483,7 +21483,7 @@ const updateCalendar = ({
     return res;
   }, []);
 
-  const fp = document.querySelector($CALENDAR)._flatpickr;
+  let fp = document.querySelector($CALENDAR)._flatpickr;
 
   if (fp && fp.destroy) {
     fp.destroy();
