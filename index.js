@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.114');
+console.log('v1.115');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -157,7 +157,7 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     return res;
   }, []);
 
-  let fp = document.querySelector($CALENDAR)._flatpickr;
+  const fp = document.querySelector($CALENDAR)._flatpickr;
   if (fp && fp.destroy) {
     fp.destroy();
   }
@@ -178,21 +178,12 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     altInput: true,
     altFormat: 'l j',
     altInputClass: 'button options',
-    // onChange: (selectedDates, dateStr) =>
-    //   updateState([
-    //     { type: 'date', payload: dateStr },
-    //     { type: 'time', payload: null },
-    //   ]),
+    onChange: (selectedDates, dateStr) =>
+      updateState([
+        { type: 'date', payload: dateStr },
+        { type: 'time', payload: null },
+      ]),
   });
-
-  fp = document.querySelector($CALENDAR)._flatpickr;
-
-  fp.config.onChange.push((selectedDates, dateStr) =>
-    updateState([
-      { type: 'date', payload: dateStr },
-      { type: 'time', payload: null },
-    ])
-  );
 };
 
 const updateTimeButtons = ({
@@ -401,7 +392,7 @@ const setupModeRadios = () => {
 
 const load = async () => {
   clearInterval(intervalId);
-  setupCalendar();
+  // setupCalendar();
 
   const filterPickups = (i) => i.iD.startsWith('P');
   const filterDeliveries = (i) => i.iD.startsWith('D');
