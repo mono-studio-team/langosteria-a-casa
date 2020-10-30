@@ -21345,7 +21345,7 @@ const isDev = true;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.110');
+console.log('v1.111');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -21498,20 +21498,25 @@ const updateCalendar = ({
     document.querySelector($CALENDAR).classList.remove($CLASS_SELECTED);
   }
 
+  fp.config.onChange.push((selectedDates, dateStr) => updateState([{
+    type: 'date',
+    payload: dateStr
+  }, {
+    type: 'time',
+    payload: null
+  }]));
   (0, _flatpickr.default)($CALENDAR, {
     locale: _it.Italian,
     enable,
     defaultDate: date,
     altInput: true,
     altFormat: 'l j',
-    altInputClass: 'button options',
-    onChange: (selectedDates, dateStr) => updateState([{
-      type: 'date',
-      payload: dateStr
-    }, {
-      type: 'time',
-      payload: null
-    }])
+    altInputClass: 'button options' // onChange: (selectedDates, dateStr) =>
+    //   updateState([
+    //     { type: 'date', payload: dateStr },
+    //     { type: 'time', payload: null },
+    //   ]),
+
   });
 };
 

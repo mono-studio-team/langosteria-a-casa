@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.110');
+console.log('v1.111');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -171,6 +171,13 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     document.querySelector($CALENDAR).classList.remove($CLASS_SELECTED);
   }
 
+  fp.config.onChange.push((selectedDates, dateStr) =>
+    updateState([
+      { type: 'date', payload: dateStr },
+      { type: 'time', payload: null },
+    ])
+  );
+
   flatpickr($CALENDAR, {
     locale: Italian,
     enable,
@@ -178,11 +185,11 @@ const updateCalendar = ({ availabilities, mode, date }) => {
     altInput: true,
     altFormat: 'l j',
     altInputClass: 'button options',
-    onChange: (selectedDates, dateStr) =>
-      updateState([
-        { type: 'date', payload: dateStr },
-        { type: 'time', payload: null },
-      ]),
+    // onChange: (selectedDates, dateStr) =>
+    //   updateState([
+    //     { type: 'date', payload: dateStr },
+    //     { type: 'time', payload: null },
+    //   ]),
   });
 };
 
