@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.113');
+console.log('v1.114');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {

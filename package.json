@@ -6,7 +6,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "date-fns": "^2.14.0",
-    "flatpickr": "^4.6.3",
+    "flatpickr": "^4.6.6",
     "spacetime": "^6.6.4"
   },
   "devDependencies": {
