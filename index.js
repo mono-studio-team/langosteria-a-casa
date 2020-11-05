@@ -14,7 +14,7 @@ import useMaps from './useMaps';
 const isDev = true;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.116');
+console.log('v1.117');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -70,7 +70,7 @@ const updateState = (actions) => {
   };
   log(JSON.stringify(statelog, null, 2));
   updateDateButtons(nextState);
-  // updateCalendar(nextState);
+  updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
   updateBoxes(nextState);
@@ -392,7 +392,7 @@ const setupModeRadios = () => {
 
 const load = async () => {
   clearInterval(intervalId);
-  // setupCalendar();
+  setupCalendar();
 
   const filterPickups = (i) => i.iD.startsWith('P');
   const filterDeliveries = (i) => i.iD.startsWith('D');
