@@ -21405,11 +21405,11 @@ const {
   default: itLocalize
 } = require('date-fns/locale/it');
 
-const isDev = true;
+const isDev = false;
 
 const log = data => isDev && console.log(data);
 
-console.log('v1.117');
+console.log('v1.118');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
