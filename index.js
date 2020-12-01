@@ -1,20 +1,11 @@
-import flatpickr from 'flatpickr';
-import { Italian } from 'flatpickr/dist/l10n/it.js';
-const {
-  addDays,
-  format,
-  isToday,
-  isAfter,
-  parse,
-  differenceInCalendarDays,
-} = require('date-fns');
+const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v1.118');
+console.log('v2.0.0');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -30,8 +21,6 @@ const $SHIPPING_OPTIONS = '#shipping-options';
 const $MODE_RADIO = 'input[name=shipping-method-choice]';
 const $DATE_BUTTONS = '.date-btn';
 const $TIME_BUTTONS = '.time-btn';
-const $CALENDAR_CONTAINER = '#calendar-container';
-const $CALENDAR = '.flatpickr';
 const $CHECKOUT_BUTTON = '#btn-checkout';
 const $NOTES_TEXTAREA = 'textarea[name=note]';
 const $INPUT_TELEPHONE = 'input[name=telefono]';
@@ -63,14 +52,13 @@ const updateState = (actions) => {
     }
   });
 
-  const statelog = {
+  const stateLog = {
     mode: nextState.mode,
     date: nextState.date,
     time: nextState.time,
   };
-  log(JSON.stringify(statelog, null, 2));
+  log(JSON.stringify(stateLog, null, 2));
   updateDateButtons(nextState);
-  updateCalendar(nextState);
   updateTimeButtons(nextState);
   updateCheckoutButton(nextState);
   updateBoxes(nextState);
@@ -141,48 +129,6 @@ const updateDateButtons = ({ availabilities, mode, date }) => {
         el.classList.remove($CLASS_SELECTED);
       }
     }
-  });
-};
-
-const updateCalendar = ({ availabilities, mode, date }) => {
-  const enable = availabilities.reduce((res, curr) => {
-    if (mode === 'delivery' && (curr.d1Availability || curr.d2Availability)) {
-      return [curr.dateFlatpickr, ...res];
-    } else if (
-      mode === 'pickup' &&
-      (curr.p1Availability || curr.p2Availability)
-    ) {
-      return [curr.dateFlatpickr, ...res];
-    }
-    return res;
-  }, []);
-
-  const fp = document.querySelector($CALENDAR)._flatpickr;
-  if (fp && fp.destroy) {
-    fp.destroy();
-  }
-
-  const selDate = parse(date, 'yyyy-MM-dd', new Date());
-  const difference = differenceInCalendarDays(selDate, new Date());
-
-  if (difference >= 3) {
-    document.querySelector($CALENDAR).classList.add($CLASS_SELECTED);
-  } else {
-    document.querySelector($CALENDAR).classList.remove($CLASS_SELECTED);
-  }
-
-  flatpickr($CALENDAR, {
-    locale: Italian,
-    enable,
-    defaultDate: date,
-    altInput: true,
-    altFormat: 'l j',
-    altInputClass: 'button options',
-    onChange: (selectedDates, dateStr) =>
-      updateState([
-        { type: 'date', payload: dateStr },
-        { type: 'time', payload: null },
-      ]),
   });
 };
 
@@ -332,22 +278,16 @@ const setupTimeButtons = () => {
     );
 };
 
-const setupCalendar = () => {
-  document.querySelector($CALENDAR_CONTAINER).innerHTML =
-    '<input class="flatpickr" placeholder="altra data" />';
-};
-
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
-    const btnDate = addDays(new Date(), +el.dataset.adddays);
-
-    // set data-date attribute
-    const attributeValue = format(btnDate, 'yyyy-MM-dd', {
+    const availability = state.availabilities[+el.dataset.adddays];
+    const label = format(availability.data, 'EEE dd MMM', {
       locale: itLocalize,
     });
-    el.setAttribute('data-date', attributeValue);
+    const attributeValue = availability.dateFlatpickr;
 
-    // click event
+    el.text = label;
+    el.setAttribute('data-date', attributeValue);
     el.onclick = () =>
       updateState([
         { type: 'date', payload: el.dataset.date },
@@ -392,7 +332,6 @@ const setupModeRadios = () => {
 
 const load = async () => {
   clearInterval(intervalId);
-  setupCalendar();
 
   const filterPickups = (i) => i.iD.startsWith('P');
   const filterDeliveries = (i) => i.iD.startsWith('D');
@@ -428,6 +367,7 @@ const load = async () => {
     tableIdOrName: condaTableIds.calendarAvailabilities,
   });
 
+  // use only today or future days not past ones
   const nextAvailabilities = availabilities.filter(
     (a) =>
       isToday(new Date(a.dateFlatpickr)) ||
