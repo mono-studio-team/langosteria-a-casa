@@ -5,7 +5,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v2.0.0');
+console.log('v2.0.1');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -281,7 +281,7 @@ const setupTimeButtons = () => {
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach((el) => {
     const availability = state.availabilities[+el.dataset.adddays];
-    const label = format(availability.data, 'EEE dd MMM', {
+    const label = format(new Date(availability.dateFlatpickr), 'EEE dd MMM', {
       locale: itLocalize,
     });
     const attributeValue = availability.dateFlatpickr;
