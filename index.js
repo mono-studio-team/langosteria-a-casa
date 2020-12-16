@@ -5,7 +5,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v2.0.1');
+console.log('v2.0.2');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
