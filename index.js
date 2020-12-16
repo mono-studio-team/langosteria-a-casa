@@ -5,7 +5,7 @@ import useMaps from './useMaps';
 const isDev = false;
 const log = (data) => isDev && console.log(data);
 
-console.log('v2.0.2');
+console.log('v2.0.3');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -290,11 +290,17 @@ const setupDateButtons = () => {
         a.pickup2Cap
     );
     const availability = validAvailabilities[+el.dataset.adddays];
+    if (!availability) {
+      el.style.visibility = 'hidden';
+      return;
+    }
+
     const label = format(new Date(availability.dateFlatpickr), 'EEE dd MMM', {
       locale: itLocalize,
     });
     const attributeValue = availability.dateFlatpickr;
 
+    el.style.visibility = 'visible';
     el.text = label;
     el.setAttribute('data-date', attributeValue);
     el.onclick = () =>
