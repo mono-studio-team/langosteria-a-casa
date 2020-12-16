@@ -18739,7 +18739,7 @@ const isDev = false;
 
 const log = data => isDev && console.log(data);
 
-console.log('v2.0.1');
+console.log('v2.0.2');
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
   settingsServices: 'grid-a1_7s2luxz',
@@ -18999,7 +18999,8 @@ const setupTimeButtons = () => {
 
 const setupDateButtons = () => {
   document.querySelectorAll($DATE_BUTTONS).forEach(el => {
-    const availability = state.availabilities[+el.dataset.adddays];
+    const validAvailabilities = state.availabilities.filter(a => a.d1Availability || a.d2Availability || a.p1Availability || a.p2Availability || a.pickup1Cap || a.pickup2Cap);
+    const availability = validAvailabilities[+el.dataset.adddays];
     const label = format(new Date(availability.dateFlatpickr), 'EEE dd MMM', {
       locale: itLocalize
     });
