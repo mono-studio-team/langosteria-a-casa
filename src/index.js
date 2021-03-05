@@ -2,7 +2,7 @@ const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = true;
+const isDev = false;
 const log = (data) => isDev && console.log(data);
 let intervalIdleTime;
 let minutes = 0;
@@ -445,12 +445,12 @@ const load = async () => {
 };
 
 setupMaps();
+setupIdleTime();
 
 let intervalId = setInterval(function () {
   log('search for radios...');
   if (!!document.querySelector($MODE_RADIO)) {
     log('radios found!');
-    setupIdleTime();
     load();
   }
 }, 1000);
