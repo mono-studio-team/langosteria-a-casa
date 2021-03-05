@@ -444,7 +444,7 @@ const load = async () => {
 
 setupMaps();
 
-document.addEventListener('DOMContentLoaded', setupIdleTime);
+window.addEventListener('DOMContentLoaded', setupIdleTime);
 
 let intervalId = setInterval(function () {
   log('search for radios...');
