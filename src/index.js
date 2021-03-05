@@ -6,7 +6,7 @@ const isDev = true;
 const log = (data) => isDev && console.log(data);
 let time;
 
-console.log('v2.0.3');
+console.log('v2.0.4');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -346,8 +346,6 @@ const setupModeRadios = () => {
   );
 };
 
-const events = ['load', 'mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
-
 function eventFire(el, etype){
   if (el.fireEvent) {
     el.fireEvent('on' + etype);
@@ -359,10 +357,9 @@ function eventFire(el, etype){
 }
 
 function emptyCart() {
+  log('TIMEOUT IDLE TIME');
   clearTimeout(time);
-  events.forEach(function(name) {
-    document.removeEventListener(name, resetTimer);
-  });
+  document.removeEventListener('input', resetTimer, true);
   const items = document
     .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
   items
@@ -373,14 +370,16 @@ function emptyCart() {
 }
 
 function resetTimer() {
+  log('RESET IDLE TIME');
   clearTimeout(time);
-  time = setTimeout(emptyCart, 15 * 60 * 1000); // 15 minutes
+  // time = setTimeout(emptyCart, 900000); // 15 minutes
+  time = setTimeout(emptyCart, 10000); // 10 seconds
 }
 
 function setupIdleTime() {
-  events.forEach(function(name) {
-    document.addEventListener(name, resetTimer, true);
-  });
+  log('SETUP IDLE TIME');
+  resetTimer();
+  document.addEventListener('input', resetTimer, true);
 }
 
 const load = async () => {
@@ -437,7 +436,6 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
-  setupIdleTime();
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -445,6 +443,8 @@ const load = async () => {
 };
 
 setupMaps();
+
+document.addEventListener('DOMContentLoaded', setupIdleTime);
 
 let intervalId = setInterval(function () {
   log('search for radios...');
