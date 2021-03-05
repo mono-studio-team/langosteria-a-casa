@@ -2,7 +2,7 @@ const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = false;
+const isDev = true;
 const log = (data) => isDev && console.log(data);
 let time;
 

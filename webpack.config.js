@@ -6,7 +6,9 @@ const dotenv = require('dotenv').config( {
 } );
 
 const config = {
-  entry: ['@babel/polyfill','./src/index.js'],
+  entry: {
+    'bundle.js': ['@babel/polyfill', './src/index.js', './src/useAxios.js', './src/useCoda.js', './src/useMaps.js']
+  },
   output: {
     path: __dirname + '/dist',
     filename: 'index.js'
@@ -23,7 +25,7 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.CODA_API_KEY': JSON.stringify(dotenv.parsed.CODA_API_KEY)
-    })
+    }),
   ],
   resolve: {
     modules: [

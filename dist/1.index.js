@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{353:function(a,e,n){"use strict";n.r(e),n.d(e,"axiosInstance",(function(){return t}));var o=n(334),t=n.n(o).a.create({baseURL:"https://coda.io/apis/v1",headers:{Authorization:"Bearer ".concat("d503e560-f2b2-47a3-8d53-eba1eb28feda")}})}}]);
-//# sourceMappingURL=1.index.js.map
