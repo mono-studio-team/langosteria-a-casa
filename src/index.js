@@ -2,11 +2,12 @@ const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = false;
+const isDev = true;
 const log = (data) => isDev && console.log(data);
-let time;
+let intervalIdleTime;
+let minutes = 0;
 
-console.log('v2.1.0');
+console.log('v2.1.1');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -357,8 +358,11 @@ function eventFire(el, etype){
 }
 
 function emptyCart() {
-  log('TIMEOUT IDLE TIME');
-  clearTimeout(time);
+  minutes += 1
+  log('IDLE TIME: ' + minutes);
+  if (minutes < 15) return;
+  log('END IDLE TIME');
+  clearInterval(intervalIdleTime);
   document.removeEventListener('input', resetTimer, true);
   const items = document
     .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
@@ -371,14 +375,12 @@ function emptyCart() {
 
 function resetTimer() {
   log('RESET IDLE TIME');
-  clearTimeout(time);
-  time = setTimeout(emptyCart, 900000); // 15 minutes
-  // time = setTimeout(emptyCart, 10000); // 10 seconds
+  minutes = 0;
 }
 
 function setupIdleTime() {
   log('SETUP IDLE TIME');
-  resetTimer();
+  intervalIdleTime = setInterval(emptyCart, 60000);
   document.addEventListener('input', resetTimer, true);
 }
 
