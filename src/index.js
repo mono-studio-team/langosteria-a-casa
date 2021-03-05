@@ -346,13 +346,30 @@ const setupModeRadios = () => {
   );
 };
 
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    const evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
+
 function logout() {
-  alert("You are now logged out.");
+  clearTimeout(time);
+  document
+    .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
+    .forEach(function(el) { eventFire(el, 'click') });
+  setTimeout(() => {
+    window.location.replace('https://acasa.langosteria.com/menu');
+  }, 2000);
 }
 
 function resetTimer() {
   clearTimeout(time);
-  time = setTimeout(logout, 3000);
+  // time = setTimeout(logout, 15 * 60 * 1000); // 15 minutes
+  time = setTimeout(logout, 5000); // 15 minutes
 }
 
 function setupIdleTime() {
