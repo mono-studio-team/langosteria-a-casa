@@ -358,7 +358,7 @@ function eventFire(el, etype){
   }
 }
 
-function logout() {
+function emptyCart() {
   clearTimeout(time);
   events.forEach(function(name) {
     document.removeEventListener(name, resetTimer);
@@ -374,18 +374,13 @@ function logout() {
 
 function resetTimer() {
   clearTimeout(time);
-  // time = setTimeout(logout, 15 * 60 * 1000); // 15 minutes
-  time = setTimeout(logout, 5000); // 15 minutes
+  time = setTimeout(emptyCart, 15 * 60 * 1000); // 15 minutes
 }
 
 function setupIdleTime() {
-  const url = new URL(window.location.href);
-  const dev = url.searchParams.get('dev');
-  if (dev === 'test') {
-    events.forEach(function(name) {
-      document.addEventListener(name, resetTimer, true);
-    });
-  }
+  events.forEach(function(name) {
+    document.addEventListener(name, resetTimer, true);
+  });
 }
 
 const load = async () => {
