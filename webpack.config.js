@@ -7,7 +7,7 @@ const dotenv = require('dotenv').config( {
 
 const config = {
   entry: {
-    'bundle.js': ['@babel/polyfill', './src/index.js', './src/useAxios.js', './src/useCoda.js', './src/useMaps.js']
+    'bundle.js': ['./src/index.js', './src/useAxios.js', './src/useCoda.js', './src/useMaps.js']
   },
   output: {
     path: __dirname + '/dist',
