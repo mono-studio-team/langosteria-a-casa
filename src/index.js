@@ -444,12 +444,11 @@ const load = async () => {
 
 setupMaps();
 
-window.addEventListener('DOMContentLoaded', setupIdleTime);
-
 let intervalId = setInterval(function () {
   log('search for radios...');
   if (!!document.querySelector($MODE_RADIO)) {
     log('radios found!');
+    setupIdleTime();
     load();
   }
 }, 1000);
