@@ -346,6 +346,8 @@ const setupModeRadios = () => {
   );
 };
 
+const events = ['load', 'mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+
 function eventFire(el, etype){
   if (el.fireEvent) {
     el.fireEvent('on' + etype);
@@ -358,12 +360,16 @@ function eventFire(el, etype){
 
 function logout() {
   clearTimeout(time);
-  document
+  events.forEach(function(name) {
+    document.removeEventListener(name, resetTimer);
+  });
+  const items = document
     .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
+  items
     .forEach(function(el) { eventFire(el, 'click') });
   setTimeout(() => {
     window.location.replace('https://acasa.langosteria.com/menu');
-  }, 2000);
+  }, items.length * 2000);
 }
 
 function resetTimer() {
@@ -376,7 +382,6 @@ function setupIdleTime() {
   const url = new URL(window.location.href);
   const dev = url.searchParams.get('dev');
   if (dev === 'test') {
-    const events = ['load', 'mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
     events.forEach(function(name) {
       document.addEventListener(name, resetTimer, true);
     });
