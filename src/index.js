@@ -2,11 +2,11 @@ const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = true;
+const isDev = false;
 const log = (data) => isDev && console.log(data);
 let time;
 
-console.log('v2.0.4');
+console.log('v2.1.0');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -372,8 +372,8 @@ function emptyCart() {
 function resetTimer() {
   log('RESET IDLE TIME');
   clearTimeout(time);
-  // time = setTimeout(emptyCart, 900000); // 15 minutes
-  time = setTimeout(emptyCart, 10000); // 10 seconds
+  time = setTimeout(emptyCart, 900000); // 15 minutes
+  // time = setTimeout(emptyCart, 10000); // 10 seconds
 }
 
 function setupIdleTime() {
