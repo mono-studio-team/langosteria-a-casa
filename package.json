@@ -2,15 +2,25 @@
   "name": "langosteria",
   "version": "1.0.0",
   "main": "index.js",
+  "author": "mono.",
   "license": "MIT",
-  "dependencies": {
-    "axios": "^0.19.2",
-    "date-fns": "^2.14.0",
-    "flatpickr": "^4.6.6",
-    "spacetime": "^6.6.4"
-  },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "scripts": {
+    "build": "webpack --mode=production -p --config webpack.config.js"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "axios": "^0.21.1",
+    "date-fns": "^2.18.0",
+    "dotenv": "^8.2.0"
   }
 }

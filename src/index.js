@@ -4,6 +4,7 @@ import useMaps from './useMaps';
 
 const isDev = false;
 const log = (data) => isDev && console.log(data);
+let time;
 
 console.log('v2.0.3');
 
@@ -345,6 +346,26 @@ const setupModeRadios = () => {
   );
 };
 
+function logout() {
+  alert("You are now logged out.");
+}
+
+function resetTimer() {
+  clearTimeout(time);
+  time = setTimeout(logout, 3000);
+}
+
+function setupIdleTime() {
+  const url = new URL(window.location.href);
+  const dev = url.searchParams.get('dev');
+  if (dev === 'test') {
+    const events = ['load', 'mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(function(name) {
+      document.addEventListener(name, resetTimer, true);
+    });
+  }
+}
+
 const load = async () => {
   clearInterval(intervalId);
 
@@ -399,6 +420,7 @@ const load = async () => {
   setupDateButtons();
   setupTimeButtons();
   setupGhostFields();
+  setupIdleTime();
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
