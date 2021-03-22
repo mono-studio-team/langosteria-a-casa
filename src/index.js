@@ -7,7 +7,7 @@ const log = (data) => isDev && console.log(data);
 let intervalIdleTime;
 let minutes = 0;
 
-console.log('v2.1.1');
+console.log('v2.1.2');
 
 const condaDocId = 'iOgTgYXs5x';
 const condaTableIds = {
@@ -317,7 +317,7 @@ const setupModeRadios = () => {
   setInterval(
     function (getState, updState) {
       const radios = document.querySelectorAll($MODE_RADIO);
-      if (radios[0].dataset.mode) return;
+      if (radios.length === 0 || radios[0].dataset.mode) return;
       radios[0].setAttribute('data-mode', 'delivery');
       radios[1].setAttribute('data-mode', 'pickup');
 
@@ -360,17 +360,22 @@ function eventFire(el, etype){
 function emptyCart() {
   minutes += 1
   log('IDLE TIME: ' + minutes);
-  if (minutes < 3) return;
+  if (minutes < 15) return;
   log('END IDLE TIME');
-  clearInterval(intervalIdleTime);
-  document.removeEventListener('input', resetTimer, true);
-  const items = document
-    .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
-  items
-    .forEach(function(el) { eventFire(el, 'click') });
-  setTimeout(() => {
-    window.location.replace('https://acasa.langosteria.com/menu');
-  }, items.length * 2000);
+  try {
+    clearInterval(intervalIdleTime);
+    document.removeEventListener('input', resetTimer, true);
+    const items = document
+      .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
+    items
+      .forEach(function(el) { eventFire(el, 'click') });
+    setTimeout(() => {
+      window.location.replace('https://acasa.langosteria.com/menu');
+    }, items.length * 500);
+  } catch (e) {
+    log('ERROR EMPTY CART');
+    log(e);
+  }
 }
 
 function resetTimer() {
