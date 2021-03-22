@@ -2,7 +2,7 @@ const { format, isToday, isAfter } = require('date-fns');
 const { default: itLocalize } = require('date-fns/locale/it');
 import useMaps from './useMaps';
 
-const isDev = false;
+const isDev = true;
 const log = (data) => isDev && console.log(data);
 let intervalIdleTime;
 let minutes = 0;
@@ -360,7 +360,7 @@ function eventFire(el, etype){
 function emptyCart() {
   minutes += 1
   log('IDLE TIME: ' + minutes);
-  if (minutes < 15) return;
+  if (minutes < 3) return;
   log('END IDLE TIME');
   clearInterval(intervalIdleTime);
   document.removeEventListener('input', resetTimer, true);
@@ -380,6 +380,7 @@ function resetTimer() {
 
 function setupIdleTime() {
   log('SETUP IDLE TIME');
+  minutes = 0
   intervalIdleTime = setInterval(emptyCart, 60000);
   document.addEventListener('input', resetTimer, true);
 }
