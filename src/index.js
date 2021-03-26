@@ -6,6 +6,7 @@ const isDev = true;
 const log = (data) => isDev && console.log(data);
 let intervalIdleTime;
 let minutes = 0;
+const minutesForResetCart = 2;
 
 console.log('v2.1.2');
 
@@ -357,20 +358,41 @@ function eventFire(el, etype){
   }
 }
 
-function emptyCart() {
+function callbackTimer() {
   minutes += 1
   log('IDLE TIME: ' + minutes);
-  if (minutes < 15) return;
+  if (minutes < minutesForResetCart) return;
+  emptyCart();
+}
+
+function checkCurrentTime() {
+  const date = new Date(window.localStorage.getItem('currentTime'));
+  const now = new Date();
+  const minutes = Math.round((((now - date) % 86400000) % 3600000) / 60000);
+  log('MINUTES PASSED', minutes);
+  if (minutes >= minutesForResetCart) {
+    emptyCart();
+    return true;
+  }
+  return false;
+}
+
+function emptyCart() {
   log('END IDLE TIME');
+  clearInterval(intervalIdleTime);
+  document.removeEventListener('input', resetTimer, true);
+  document.removeEventListener('mousedown', checkCurrentTime, true);
+  document.removeEventListener('mousemove', checkCurrentTime, true);
+  document.removeEventListener('keypress', checkCurrentTime, true);
+  document.removeEventListener('scroll', checkCurrentTime, true);
+  document.removeEventListener('touchstart', checkCurrentTime, true);
   try {
-    clearInterval(intervalIdleTime);
-    document.removeEventListener('input', resetTimer, true);
     const items = document
       .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
     items
       .forEach(function(el) { eventFire(el, 'click') });
     setTimeout(() => {
-      window.location.replace('https://acasa.langosteria.com/menu');
+      window.location.href = 'https://acasa.langosteria.com/menu';
     }, items.length * 500);
   } catch (e) {
     log('ERROR EMPTY CART');
@@ -379,15 +401,26 @@ function emptyCart() {
 }
 
 function resetTimer() {
-  log('RESET IDLE TIME');
-  minutes = 0;
+  if (!checkCurrentTime()) {
+    log('RESET IDLE TIME');
+    minutes = 0;
+    window.localStorage.setItem('currentTime', new Date().toISOString());
+  }
 }
 
 function setupIdleTime() {
   log('SETUP IDLE TIME');
   minutes = 0
-  intervalIdleTime = setInterval(emptyCart, 60000);
+  intervalIdleTime = setInterval(callbackTimer, 60000);
+  window.localStorage.setItem('currentTime', new Date().toISOString());
   document.addEventListener('input', resetTimer, true);
+
+  // Check on user interaction timer
+  document.addEventListener('mousedown', checkCurrentTime, true);
+  document.addEventListener('mousemove', checkCurrentTime, true);
+  document.addEventListener('keypress', checkCurrentTime, true);
+  document.addEventListener('scroll', checkCurrentTime, true);
+  document.addEventListener('touchstart', checkCurrentTime, true);
 }
 
 const load = async () => {
