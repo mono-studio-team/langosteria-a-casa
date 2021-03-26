@@ -386,6 +386,7 @@ function emptyCart() {
   document.removeEventListener('keypress', checkCurrentTime, true);
   document.removeEventListener('scroll', checkCurrentTime, true);
   document.removeEventListener('touchstart', checkCurrentTime, true);
+  document.removeEventListener('visibilitychange', checkCurrentTime, true);
   try {
     const items = document
       .querySelectorAll('.w-commerce-commercecartcontainer .w-commerce-commercecartform a.cart-remove')
@@ -421,6 +422,7 @@ function setupIdleTime() {
   document.addEventListener('keypress', checkCurrentTime, true);
   document.addEventListener('scroll', checkCurrentTime, true);
   document.addEventListener('touchstart', checkCurrentTime, true);
+  document.addEventListener('visibilitychange', checkCurrentTime, true);
 }
 
 const load = async () => {
