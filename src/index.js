@@ -6,7 +6,7 @@ const isDev = true;
 const log = (data) => isDev && console.log(data);
 let intervalIdleTime;
 let minutes = 0;
-const minutesForResetCart = 2;
+const minutesForResetCart = 10;
 
 console.log('v2.1.2');
 
@@ -370,6 +370,7 @@ function checkCurrentTime() {
   const now = new Date();
   const minutes = Math.round((((now - date) % 86400000) % 3600000) / 60000);
   log(`MINUTES PASSED: ${minutes}`);
+  log(`DIFFERENCE: ${now - date}`);
   if (minutes >= minutesForResetCart) {
     emptyCart();
     return true;
