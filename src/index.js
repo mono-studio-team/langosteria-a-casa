@@ -369,7 +369,7 @@ function checkCurrentTime() {
   const date = new Date(window.localStorage.getItem('currentTime'));
   const now = new Date();
   const minutes = Math.round((((now - date) % 86400000) % 3600000) / 60000);
-  log('MINUTES PASSED', minutes);
+  log(`MINUTES PASSED: ${minutes}`);
   if (minutes >= minutesForResetCart) {
     emptyCart();
     return true;
